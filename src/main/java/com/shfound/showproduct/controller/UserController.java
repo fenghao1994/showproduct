@@ -32,9 +32,9 @@ public class UserController {
             userModel.setPassword(password);
             int resultCode = userService.register(userModel);
             switch (resultCode) {
-                case 1000: setUserResultAttr(userResult, 1000, "注册成功");;break;
-                case 1001: setUserResultAttr(userResult, 1001, "注册失败");;break;
-                case 1002: setUserResultAttr(userResult, 1001, "账户已存在");;break;
+                case 1000: setUserResultAttr(userResult, 1000, "注册成功");break;
+                case 1001: setUserResultAttr(userResult, 1001, "注册失败");break;
+                case 1002: setUserResultAttr(userResult, 1001, "账户已存在");break;
             }
         }
         setSuccessResult(successResult, userResult);
@@ -53,9 +53,9 @@ public class UserController {
             userModel.setPassword(password);
             int resultCode = userService.login(userModel);
             switch (resultCode) {
-                case 1000:setUserResultAttr(userResult, 1000, "登陆成功");;break;
-                case 1001:setUserResultAttr(userResult, 1001, "用户不存在");;break;
-                case 1002:setUserResultAttr(userResult, 1001, "密码错误");;break;
+                case 1000:setUserResultAttr(userResult, 1000, "登陆成功");break;
+                case 1001:setUserResultAttr(userResult, 1001, "用户不存在");break;
+                case 1002:setUserResultAttr(userResult, 1001, "密码错误");break;
             }
         }
         setSuccessResult(successResult, userResult);
