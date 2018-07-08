@@ -35,6 +35,9 @@ public class AdvertisementModel {
     @Column
     private Date editDate;
 
+    @Column
+    private boolean isDelete;
+
     public int getId() {
         return id;
     }
@@ -89,5 +92,13 @@ public class AdvertisementModel {
 
     public void setEditDate(Date editDate) {
         this.editDate = editDate;
+    }
+
+    public boolean isDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(boolean delete) {
+        isDelete = delete;
     }
 }

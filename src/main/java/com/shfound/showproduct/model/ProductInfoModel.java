@@ -84,6 +84,9 @@ public class ProductInfoModel {
     @Column
     private Date editTime;
 
+    @Column
+    private boolean isDelete;
+
     public int getId() {
         return id;
     }
@@ -234,5 +237,13 @@ public class ProductInfoModel {
 
     public void setEditTime(Date editTime) {
         this.editTime = editTime;
+    }
+
+    public boolean isDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(boolean delete) {
+        isDelete = delete;
     }
 }
