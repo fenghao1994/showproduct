@@ -32,11 +32,11 @@ public class ProductInfoModel {
 
     //开始收集时间
     @Column
-    private Date StratTime;
+    private long startTime;
 
     //结束收集时间
     @Column
-    private Date endTime;
+    private long endTime;
 
     //项目小图片  icon url
     @Column
@@ -127,20 +127,20 @@ public class ProductInfoModel {
         isHot = hot;
     }
 
-    public Date getStratTime() {
-        return StratTime;
+    public long getStartTime() {
+        return startTime;
     }
 
-    public void setStratTime(Date stratTime) {
-        StratTime = stratTime;
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
     }
 
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
+    public void setEndTime(long endTime) {
         this.endTime = endTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
     }
 
     public String getIconUrl() {
