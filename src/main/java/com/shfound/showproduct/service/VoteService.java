@@ -20,8 +20,9 @@ public class VoteService {
     private JdbcTemplate jdbcTemplate;
 
     public boolean createVote(VoteModel voteModel) {
-        String sql = "INSERT INTO vote SET(user_id, prod_id, limit) VALUE(?, ?, ?)";
-        int update = jdbcTemplate.update(sql, new Object[]{voteModel.getUserId(), voteModel.getProdId(), voteModel.getLimit()});
+        String sql = "INSERT INTO vote SET(user_id, prod_id, prod_limit) VALUE(?, ?, ?)";
+        int update = jdbcTemplate.update(sql, new Object[]{voteModel.getUserId(), voteModel.getProdId(), voteModel.getProdLimit()});
+
         return update >= 0 ? true : false;
     }
 
@@ -34,7 +35,7 @@ public class VoteService {
             for (int i = 0; i < mapArrayList.size(); i++) {
                 VoteModel voteModel = new VoteModel();
                 voteModel.setId((Integer) mapArrayList.get(i).get("id"));
-                voteModel.setLimit((Double) mapArrayList.get(i).get("limit"));
+                voteModel.setProdLimit((Double) mapArrayList.get(i).get("prod_limit"));
                 voteModel.setProdId((Integer) mapArrayList.get(i).get("prod_id"));
                 voteModel.setUserId((Integer) mapArrayList.get(i).get("user_id"));
                 voteModel.setCreateTime((Date) mapArrayList.get(i).get("create_time"));
@@ -61,8 +62,8 @@ public class VoteService {
             RowMapper<String> rowMapper1 = new BeanPropertyRowMapper<>(String.class);
             String mobile = jdbcTemplate.queryForObject(sql2, rowMapper1, voteModel.getUserId());
             mobiles.add(mobile);
-            limits.add(voteModel.getLimit());
-            amount += voteModel.getLimit();
+            limits.add(voteModel.getProdLimit());
+            amount += voteModel.getProdLimit();
         }
         voteResult.setUserLimits(limits);
         voteResult.setUserMobiles(mobiles);

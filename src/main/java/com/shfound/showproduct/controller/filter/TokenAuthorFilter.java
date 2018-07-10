@@ -19,13 +19,14 @@ import java.io.UnsupportedEncodingException;
 
 
 @Component
-@WebFilter(urlPatterns = {"/*"}, filterName="tokenAuthorFilter")
+@WebFilter(urlPatterns = {"/vote/*", "/user/update/*"}, filterName = "tokenAuthorFilter")
 public class TokenAuthorFilter implements Filter {
 
     Logger logger = LoggerFactory.getLogger(TokenAuthorFilter.class);
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -33,11 +34,15 @@ public class TokenAuthorFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest)servletRequest;
+        HttpServletRequest req = (HttpServletRequest) servletRequest;
         servletResponse.setCharacterEncoding("UTF-8");
         servletResponse.setContentType("application/json; charset=utf-8");
         String token = req.getHeader("token");
-        String value = stringRedisTemplate.opsForValue().get(token);
+        String value = "";
+        if (token != null && !token.isEmpty()) {
+            value = stringRedisTemplate.opsForValue().get(token);
+        }
+
         SuccessResult res = new SuccessResult();
         if (null == token || token.isEmpty() || value.isEmpty()) {
             res.setCode(1001);
@@ -61,7 +66,7 @@ public class TokenAuthorFilter implements Filter {
                 if (null != writer) {
                     writer.close();
                 }
-                if(null != osw){
+                if (null != osw) {
                     osw.close();
                 }
             }

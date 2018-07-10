@@ -47,7 +47,7 @@ public class UserService {
         RowMapper<UserModel> rowMapper = new BeanPropertyRowMapper<>(UserModel.class);
         UserModel user;
         try {
-            user = jdbcTemplate.queryForObject(sql, rowMapper, userModel);
+            user = jdbcTemplate.queryForObject(sql, rowMapper, userModel.getMobile());
         } catch (Exception e) {
             user = null;
         }

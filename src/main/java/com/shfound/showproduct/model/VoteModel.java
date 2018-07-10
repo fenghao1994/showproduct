@@ -21,7 +21,7 @@ public class VoteModel {
 
     //个人预投额度
     @Column
-    private double limit;
+    private double prodLimit;
 
     //创建时间
     @Column
@@ -55,12 +55,12 @@ public class VoteModel {
         this.prodId = proId;
     }
 
-    public double getLimit() {
-        return limit;
+    public double getProdLimit() {
+        return prodLimit;
     }
 
-    public void setLimit(double limit) {
-        this.limit = limit;
+    public void setProdLimit(double prodLimit) {
+        this.prodLimit = prodLimit;
     }
 
     public Date getCreateTime() {
