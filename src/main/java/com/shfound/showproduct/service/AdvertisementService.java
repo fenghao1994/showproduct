@@ -18,7 +18,7 @@ public class AdvertisementService {
     private JdbcTemplate jdbcTemplate;
 
     public boolean createAdvert(AdvertisementModel advertisementModel) {
-        String sql = "INSERT INTO advertisement SET (img_url, jump_page, is_show, marks, is_delete) VALUE (? ,? ,?, ?, ?)";
+        String sql = "INSERT INTO advertisement (img_url, jump_page, is_show, marks, is_delete) VALUES (? ,? ,?, ?, ?)";
         int index = jdbcTemplate.update(sql, new Object[]{advertisementModel.getImgUrl(), advertisementModel.getJumpPage(),
                 advertisementModel.isShow(), advertisementModel.getMarks(), advertisementModel.isDelete()});
         if (index >= 0) {
@@ -28,7 +28,7 @@ public class AdvertisementService {
     }
 
     public boolean updateAdvert(AdvertisementModel advertisementModel) {
-        String sql = "UPDATE advertisement img_url = ?, jump_page = ?, is_show = ?, marks = ?, is_delete = ? " +
+        String sql = "UPDATE advertisement SET img_url = ?, jump_page = ?, is_show = ?, marks = ?, is_delete = ? " +
                 "WHERE id = ?";
         int index = jdbcTemplate.update(sql, new Object[]{advertisementModel.getImgUrl(), advertisementModel.getJumpPage(),
                 advertisementModel.isShow(), advertisementModel.getMarks(), advertisementModel.isDelete(), advertisementModel.getId()});

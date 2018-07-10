@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -41,8 +42,15 @@ public class AdvertisementController {
     }
 
     @RequestMapping(value = "/create/advert", method = RequestMethod.POST)
-    public ResponseEntity<SuccessResult> createAdvert(@ModelAttribute("advert")AdvertisementModel advertisementModel) {
+    public ResponseEntity<SuccessResult> createAdvert(@RequestParam("imgUrl")String imgUrl, @RequestParam(value = "jumpPage", required = false) String jumpPage,
+    @RequestParam(value = "isShow", required = false) boolean isShow, @RequestParam(value = "marks", required = false) String marks, @RequestParam(value = "isDelete", required = false) boolean isDelete) {
         SuccessResult successResult = new SuccessResult();
+        AdvertisementModel advertisementModel = new AdvertisementModel();
+        advertisementModel.setImgUrl(imgUrl);
+        advertisementModel.setJumpPage(jumpPage);
+        advertisementModel.setShow(isShow);
+        advertisementModel.setMarks(marks);
+        advertisementModel.setDelete(isDelete);
         boolean isSuccess = advertisementService.createAdvert(advertisementModel);
         if (isSuccess) {
             successResult.setCode(1000);
@@ -55,8 +63,16 @@ public class AdvertisementController {
     }
 
     @RequestMapping(value = "/update/advert", method = RequestMethod.POST)
-    public ResponseEntity<SuccessResult> updateAdvert(@ModelAttribute("advert")AdvertisementModel advertisementModel) {
+    public ResponseEntity<SuccessResult> updateAdvert(@RequestParam("id")int id, @RequestParam("imgUrl")String imgUrl, @RequestParam(value = "jumpPage", required = false) String jumpPage,
+                                                      @RequestParam(value = "isShow", required = false) boolean isShow, @RequestParam(value = "marks", required = false) String marks, @RequestParam(value = "isDelete", required = false) boolean isDelete) {
         SuccessResult successResult = new SuccessResult();
+        AdvertisementModel advertisementModel = new AdvertisementModel();
+        advertisementModel.setId(id);
+        advertisementModel.setImgUrl(imgUrl);
+        advertisementModel.setJumpPage(jumpPage);
+        advertisementModel.setShow(isShow);
+        advertisementModel.setMarks(marks);
+        advertisementModel.setDelete(isDelete);
         boolean isSuccess = advertisementService.updateAdvert(advertisementModel);
         if (isSuccess) {
             successResult.setCode(1000);
