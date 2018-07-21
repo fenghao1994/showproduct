@@ -1,6 +1,8 @@
 package com.shfound.showproduct.service;
 
 import com.shfound.showproduct.controller.result.VoteResult;
+import com.shfound.showproduct.model.ProductInfoModel;
+import com.shfound.showproduct.model.UserModel;
 import com.shfound.showproduct.model.VoteModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -20,7 +22,7 @@ public class VoteService {
     private JdbcTemplate jdbcTemplate;
 
     public boolean createVote(VoteModel voteModel) {
-        String sql = "INSERT INTO vote SET(user_id, prod_id, prod_limit) VALUE(?, ?, ?)";
+        String sql = "INSERT INTO vote (user_id, prod_id, prod_limit) VALUE(?, ?, ?)";
         int update = jdbcTemplate.update(sql, new Object[]{voteModel.getUserId(), voteModel.getProdId(), voteModel.getProdLimit()});
 
         return update >= 0 ? true : false;
@@ -45,23 +47,24 @@ public class VoteService {
             }
         }
 
-        String sql1 = "SELECT prod_name FROM productInfo WHERE id = ?";
-        RowMapper<String> rowMapper = new BeanPropertyRowMapper<>(String.class);
-        String proName;
+        String sql1 = "SELECT * FROM product_info WHERE id = ?";
+        RowMapper<ProductInfoModel> rowMapper = new BeanPropertyRowMapper<>(ProductInfoModel.class);
+        ProductInfoModel productInfoModel;
         try {
-            proName = jdbcTemplate.queryForObject(sql1, rowMapper, prodId);
+            productInfoModel = jdbcTemplate.queryForObject(sql1, rowMapper, prodId);
         } catch (Exception e) {
-            proName = null;
+            productInfoModel = null;
         }
-        voteResult.setProdName(proName);
+        if (productInfoModel != null && productInfoModel.getProName() != null && !productInfoModel.getProName().isEmpty())
+            voteResult.setProdName(productInfoModel.getProName());
         List<String> mobiles = new ArrayList<>();
         List<Double> limits = new ArrayList<>();
         double amount = 0;
-        for (VoteModel voteModel: voteModelList) {
-            String sql2 = "SELECT mobile FROM user WHERE id = ?";
-            RowMapper<String> rowMapper1 = new BeanPropertyRowMapper<>(String.class);
-            String mobile = jdbcTemplate.queryForObject(sql2, rowMapper1, voteModel.getUserId());
-            mobiles.add(mobile);
+        for (VoteModel voteModel : voteModelList) {
+            String sql2 = "SELECT * FROM user WHERE id = ?";
+            RowMapper<UserModel> rowMapper1 = new BeanPropertyRowMapper<>(UserModel.class);
+            UserModel userModel = jdbcTemplate.queryForObject(sql2, rowMapper1, voteModel.getUserId());
+            mobiles.add(userModel.getMobile());
             limits.add(voteModel.getProdLimit());
             amount += voteModel.getProdLimit();
         }
