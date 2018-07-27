@@ -123,6 +123,10 @@ public class ProductInfoModel {
         return isHot;
     }
 
+    public boolean getIsHot() {
+        return isHot;
+    }
+
     public void setHot(boolean hot) {
         isHot = hot;
     }
@@ -219,6 +223,10 @@ public class ProductInfoModel {
         return isStopCollection;
     }
 
+    public boolean getIsStopCollection() {
+        return isStopCollection;
+    }
+
     public void setStopCollection(boolean stopCollection) {
         isStopCollection = stopCollection;
     }
@@ -240,6 +248,10 @@ public class ProductInfoModel {
     }
 
     public boolean isDelete() {
+        return isDelete;
+    }
+
+    public boolean getIsDelete() {
         return isDelete;
     }
 

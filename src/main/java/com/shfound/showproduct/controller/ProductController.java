@@ -24,14 +24,14 @@ public class ProductController {
 
     @RequestMapping(value = "/create/product", method = RequestMethod.POST)
     public ResponseEntity<SuccessResult> createPro(@RequestParam("proName") String proName, @RequestParam("proSimDesc") String proSimDesc,
-                                                   @RequestParam(value = "proGrade", required = false) String proGrade, @RequestParam(value = "isHot", required = false) boolean isHot,
-                                                   @RequestParam(value = "stratTime", required = false) long startTime, @RequestParam(value = "endTime", required = false) long endTime,
+                                                   @RequestParam(value = "proGrade", required = false) String proGrade, @RequestParam(value = "isHot", required = false, defaultValue = "false") boolean isHot,
+                                                   @RequestParam(value = "stratTime", required = false, defaultValue = "0") long startTime, @RequestParam(value = "endTime", required = false, defaultValue = "0") long endTime,
                                                    @RequestParam(value = "iconUrl", required = false) String iconUrl, @RequestParam("proImgUrl") String proImgUrl,
-                                                   @RequestParam(value = "proLabel", required = false) String proLabel, @RequestParam("proType") int proType,
+                                                   @RequestParam(value = "proLabel", required = false) String proLabel, @RequestParam(value = "proType", defaultValue = "0") int proType,
                                                    @RequestParam(value = "marks", required = false) String marks, @RequestParam("proRecommend") String proRecommend,
                                                    @RequestParam(value = "proRealLimit", required = false) String proRealLimit, @RequestParam(value = "proMockLimit", required = false) String proMockLimit,
-                                                   @RequestParam(value = "collectionCoinAddress", required = false) String collectionCoinAddress, @RequestParam(value = "isStopCollection", required = false) boolean isStopCollection,
-                                                   @RequestParam(value = "isDelete", required = false) boolean isDelete) {
+                                                   @RequestParam(value = "collectionCoinAddress", required = false) String collectionCoinAddress, @RequestParam(value = "isStopCollection", required = false, defaultValue = "false") boolean isStopCollection,
+                                                   @RequestParam(value = "isDelete", required = false, defaultValue = "false") boolean isDelete) {
         SuccessResult successResult = new SuccessResult();
         ProductInfoModel productInfoModel = new ProductInfoModel();
         productInfoModel.setProName(proName);
