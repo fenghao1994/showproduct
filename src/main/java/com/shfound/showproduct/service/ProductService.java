@@ -86,6 +86,17 @@ public class ProductService {
         return productInfoModels;
     }
 
+    public ProductInfoModel getOneProdById(int id) {
+        String sql = "SELECT * FROM product_info WHERE id = " + id;
+        List<ProductInfoModel> productInfoModels = new ArrayList<>();
+        List<Map<String, Object>> mapArrayList = jdbcTemplate.queryForList(sql);
+        findResult(productInfoModels, mapArrayList);
+        if (mapArrayList.isEmpty()) {
+            return null;
+        }
+        return productInfoModels.get(0);
+    }
+
     private void findResult(List<ProductInfoModel> productInfoModels, List<Map<String, Object>> mapArrayList) {
         if (mapArrayList != null && mapArrayList.size() > 0) {
             for (int i = 0; i < mapArrayList.size(); i++) {
@@ -95,7 +106,7 @@ public class ProductService {
                 productInfoModel.setCreateTime((Date) mapArrayList.get(i).get("create_time"));
                 productInfoModel.setDelete((Boolean) mapArrayList.get(i).get("is_delete"));
                 productInfoModel.setEditTime((Date) mapArrayList.get(i).get("edit_time"));
-                productInfoModel.setEndTime((Long) mapArrayList.get(i).get("end_time"));
+                productInfoModel.setEndTime((String) mapArrayList.get(i).get("end_time"));
                 productInfoModel.setHot((Boolean) mapArrayList.get(i).get("is_hot"));
                 productInfoModel.setIconUrl((String) mapArrayList.get(i).get("icon_url"));
                 productInfoModel.setMarks((String) mapArrayList.get(i).get("marks"));
@@ -109,7 +120,7 @@ public class ProductService {
                 productInfoModel.setProSimDesc((String) mapArrayList.get(i).get("pro_sim_desc"));
                 productInfoModel.setProType((Integer) mapArrayList.get(i).get("pro_type"));
                 productInfoModel.setStopCollection((Boolean) mapArrayList.get(i).get("is_stop_collection"));
-                productInfoModel.setStartTime((Long) mapArrayList.get(i).get("start_time"));
+                productInfoModel.setStartTime((String) mapArrayList.get(i).get("start_time"));
                 productInfoModels.add(productInfoModel);
             }
         }

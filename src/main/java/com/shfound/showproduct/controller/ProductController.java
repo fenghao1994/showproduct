@@ -1,18 +1,23 @@
 package com.shfound.showproduct.controller;
 
+import com.shfound.showproduct.controller.result.SimpleProduct;
 import com.shfound.showproduct.controller.result.SuccessResult;
 import com.shfound.showproduct.model.ProductInfoModel;
 import com.shfound.showproduct.service.ProductService;
+import org.apache.logging.log4j.util.Strings;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.xml.ws.Response;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +30,7 @@ public class ProductController {
     @RequestMapping(value = "/create/product", method = RequestMethod.POST)
     public ResponseEntity<SuccessResult> createPro(@RequestParam("proName") String proName, @RequestParam("proSimDesc") String proSimDesc,
                                                    @RequestParam(value = "proGrade", required = false) String proGrade, @RequestParam(value = "isHot", required = false, defaultValue = "false") boolean isHot,
-                                                   @RequestParam(value = "stratTime", required = false, defaultValue = "0") long startTime, @RequestParam(value = "endTime", required = false, defaultValue = "0") long endTime,
+                                                   @RequestParam(value = "stratTime", required = false, defaultValue = "") String startTime, @RequestParam(value = "endTime", required = false, defaultValue = "") String endTime,
                                                    @RequestParam(value = "iconUrl", required = false) String iconUrl, @RequestParam("proImgUrl") String proImgUrl,
                                                    @RequestParam(value = "proLabel", required = false) String proLabel, @RequestParam(value = "proType", defaultValue = "0") int proType,
                                                    @RequestParam(value = "marks", required = false) String marks, @RequestParam("proRecommend") String proRecommend,
@@ -38,7 +43,13 @@ public class ProductController {
         productInfoModel.setProSimDesc(proSimDesc);
         productInfoModel.setProGrade(proGrade);
         productInfoModel.setHot(isHot);
+        if (!Strings.isEmpty(startTime)) {
+            startTime = startTime.replace("T", " ");
+        }
         productInfoModel.setStartTime(startTime);
+        if (!Strings.isEmpty(endTime)) {
+            endTime = endTime.replace("T", " ");
+        }
         productInfoModel.setEndTime(endTime);
         productInfoModel.setIconUrl(iconUrl);
         productInfoModel.setProImgUrl(proImgUrl);
@@ -65,7 +76,7 @@ public class ProductController {
     @RequestMapping(value = "/update/product", method = RequestMethod.POST)
     public ResponseEntity<SuccessResult> updatePro(@RequestParam("id") int id, @RequestParam("proName") String proName, @RequestParam("proSimDesc") String proSimDesc,
                                                    @RequestParam(value = "proGrade", required = false) String proGrade, @RequestParam(value = "isHot", required = false) boolean isHot,
-                                                   @RequestParam(value = "stratTime", required = false) long startTime, @RequestParam(value = "endTime", required = false) long endTime,
+                                                   @RequestParam(value = "startTime", required = false) String startTime, @RequestParam(value = "endTime", required = false) String endTime,
                                                    @RequestParam(value = "iconUrl", required = false) String iconUrl, @RequestParam("proImgUrl") String proImgUrl,
                                                    @RequestParam(value = "proLabel", required = false) String proLabel, @RequestParam("proType") int proType,
                                                    @RequestParam(value = "marks", required = false) String marks, @RequestParam("proRecommend") String proRecommend,
@@ -79,7 +90,13 @@ public class ProductController {
         productInfoModel.setProSimDesc(proSimDesc);
         productInfoModel.setProGrade(proGrade);
         productInfoModel.setHot(isHot);
+        if (!Strings.isEmpty(startTime)) {
+            startTime = startTime.replace("T", " ");
+        }
         productInfoModel.setStartTime(startTime);
+        if (!Strings.isEmpty(endTime)) {
+            endTime = endTime.replace("T", " ");
+        }
         productInfoModel.setEndTime(endTime);
         productInfoModel.setIconUrl(iconUrl);
         productInfoModel.setProImgUrl(proImgUrl);
@@ -113,6 +130,23 @@ public class ProductController {
         return new ResponseEntity<>(successResult, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/getAllSimpleProduct", method = RequestMethod.POST)
+    public ResponseEntity<List<SimpleProduct>> getAllSimpleProduct() {
+//        SuccessResult<List<SimpleProduct>> successResult = new SuccessResult<>();
+        List<ProductInfoModel> products = productService.getProducts();
+        List<SimpleProduct> list = new ArrayList<>();
+        for (ProductInfoModel productInfoModel : products) {
+            SimpleProduct simpleProduct = new SimpleProduct();
+            simpleProduct.setId(productInfoModel.getId());
+            simpleProduct.setName(productInfoModel.getProName());
+            list.add(simpleProduct);
+        }
+//        successResult.setCode(1000);
+//        successResult.setMessage("响应成功");
+//        successResult.setDate(list);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/getSearchProduct", method = RequestMethod.POST)
     public ResponseEntity<SuccessResult<List<ProductInfoModel>>> getSearchProduct(@RequestParam("search") String search) {
         SuccessResult<List<ProductInfoModel>> successResult = new SuccessResult<>();
@@ -121,6 +155,21 @@ public class ProductController {
         successResult.setMessage("响应成功");
         successResult.setDate(products);
         return new ResponseEntity<>(successResult, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getOneSimpleSearch", method = RequestMethod.POST)
+    public ResponseEntity<List<SimpleProduct>> getOneSimProduct(@RequestParam("name") String name) {
+        List<ProductInfoModel> products = productService.getSearchProducts(name);
+        List<SimpleProduct> list = new ArrayList<>();
+        if (products != null && !products.isEmpty()) {
+            for (ProductInfoModel productInfoModel : products) {
+                SimpleProduct simpleProduct = new SimpleProduct();
+                simpleProduct.setId(productInfoModel.getId());
+                simpleProduct.setName(productInfoModel.getProName());
+                list.add(simpleProduct);
+            }
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/client/getSearchProduct", method = RequestMethod.POST)
@@ -141,5 +190,11 @@ public class ProductController {
         successResult.setMessage("响应成功");
         successResult.setDate(products);
         return new ResponseEntity<>(successResult, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/editProd", method = RequestMethod.POST)
+    public ResponseEntity<ProductInfoModel> editProduct(@RequestParam("id") int id) {
+        ProductInfoModel productInfoModel = productService.getOneProdById(id);
+        return new ResponseEntity<>(productInfoModel, HttpStatus.OK);
     }
 }

@@ -1,5 +1,8 @@
 package com.shfound.showproduct.model;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -29,10 +32,10 @@ public class AdvertisementModel {
     @Column
     private String marks;
 
-    @Column
+    @CreatedDate
     private Date createDate;
 
-    @Column
+    @LastModifiedDate
     private Date editDate;
 
     @Column

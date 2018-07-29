@@ -1,5 +1,8 @@
 package com.shfound.showproduct.model;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -12,6 +15,12 @@ public class UserModel {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
+
+    @Column
+    private String wxId;
+
+    //上级邀请人
+    @Column String superInviteCode;
 
     //手机号
     @Column
@@ -26,11 +35,11 @@ public class UserModel {
     private String headImg;
 
     //创建时间
-    @Column
+    @CreatedDate
     private Date createTime;
 
     //修改时间
-    @Column
+    @LastModifiedDate
     private Date editTime;
 
     public int getId() {
@@ -79,5 +88,21 @@ public class UserModel {
 
     public void setEditTime(Date editTime) {
         this.editTime = editTime;
+    }
+
+    public String getWxId() {
+        return wxId;
+    }
+
+    public void setWxId(String wxId) {
+        this.wxId = wxId;
+    }
+
+    public String getSuperInviteCode() {
+        return superInviteCode;
+    }
+
+    public void setSuperInviteCode(String superInviteCode) {
+        this.superInviteCode = superInviteCode;
     }
 }

@@ -1,5 +1,7 @@
 package com.shfound.showproduct.service;
 
+import com.shfound.showproduct.controller.result.CustomerResult;
+import com.shfound.showproduct.model.ProductInfoModel;
 import com.shfound.showproduct.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -7,6 +9,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -17,7 +23,8 @@ public class UserService {
 
     /**
      * 用户注册
-     * @param userModel  1000 注册成功  1001 注册失败  1002  账户已存在
+     *
+     * @param userModel 1000 注册成功  1001 注册失败  1002  账户已存在
      * @return
      */
     public int register(UserModel userModel) {
@@ -31,23 +38,23 @@ public class UserService {
                 return 1001;
             }
         } else {
-           return 1002;
+            return 1002;
         }
     }
 
     private int insertUser(UserModel userModel) {
-        String sql = "INSERT INTO user (mobile, password, head_img) VALUE (?, ? , ?)";
+        String sql = "INSERT INTO user (mobile, password, head_img, wx_id, super_invite_code) VALUE (?, ? , ? , ?, ?)";
         int update = jdbcTemplate.update(sql, new Object[]{userModel.getMobile(), userModel.getPassword(),
-                StringUtils.isEmpty(userModel.getHeadImg()) ? "" : userModel.getHeadImg()});
+                StringUtils.isEmpty(userModel.getHeadImg()) ? "" : userModel.getHeadImg(), userModel.getWxId(), userModel.getSuperInviteCode()});
         return update;
     }
 
     private UserModel isExite(UserModel userModel) {
-        String sql = "SELECT * FROM user WHERE mobile = ?";
+        String sql = "SELECT * FROM user WHERE wx_id = ?";
         RowMapper<UserModel> rowMapper = new BeanPropertyRowMapper<>(UserModel.class);
         UserModel user;
         try {
-            user = jdbcTemplate.queryForObject(sql, rowMapper, userModel.getMobile());
+            user = jdbcTemplate.queryForObject(sql, rowMapper, userModel.getWxId());
         } catch (Exception e) {
             user = null;
         }
@@ -56,6 +63,7 @@ public class UserService {
 
     /**
      * 登陆
+     *
      * @param userModel 1000 登陆成功 1001 用户不存在 1002 密码错误
      * @return
      */
@@ -74,6 +82,7 @@ public class UserService {
 
     /**
      * 修改用户密码
+     *
      * @param userModel 1000 修改成功 1001 用户不存在  1002修改失败
      * @return
      */
@@ -99,6 +108,7 @@ public class UserService {
 
     /**
      * 修改用户头像
+     *
      * @param userModel 1000 修改成功， 1001 用户不存在 1002 修改失败
      * @return
      */
@@ -121,4 +131,67 @@ public class UserService {
         return update;
     }
 
+    public List<UserModel> getAllUser() {
+        String sql = "SELECT * FROM user";
+        List<UserModel> userModels = new ArrayList<>();
+        List<Map<String, Object>> mapArrayList = jdbcTemplate.queryForList(sql);
+        fullUserInfo(userModels, mapArrayList);
+        return userModels;
+    }
+
+    private void fullUserInfo(List<UserModel> list, List<Map<String, Object>> maps) {
+        if (maps != null && maps.size() > 0) {
+            for (int i = 0; i < maps.size(); i++) {
+                UserModel userModel = new UserModel();
+                userModel.setId((Integer) maps.get(i).get("id"));
+//                userModel.setHeadImg(maps.get(i).get("headimg"));
+                userModel.setMobile((String) maps.get(i).get("mobile"));
+                userModel.setWxId((String) maps.get(i).get("wx_id"));
+                userModel.setSuperInviteCode((String) maps.get(i).get("super_invite_code"));
+                list.add(userModel);
+            }
+        }
+    }
+
+    public UserModel getOneUser(String wxId) {
+        UserModel userModel = new UserModel();
+        userModel.setWxId(wxId);
+        return isExite(userModel);
+    }
+
+    public CustomerResult getCustomerResult(String wxId) {
+        UserModel userModel = new UserModel();
+        userModel.setWxId(wxId);
+        UserModel user = isExite(userModel);
+        if (user == null) {
+            return null;
+        }
+        List<UserModel> firstLevel = getInvitionUser(wxId);
+        List<UserModel> secondLevel = new ArrayList<>();
+        for (int i = 0; i < firstLevel.size(); i++) {
+            secondLevel.addAll(getInvitionUser(firstLevel.get(i).getWxId()));
+        }
+        CustomerResult customerResult = new CustomerResult();
+        customerResult.setFirstLevel(firstLevel);
+        customerResult.setSecondLevel(secondLevel);
+        customerResult.setWxId(wxId);
+        return customerResult;
+    }
+
+    private List<UserModel> getInvitionUser(String wxId) {
+        String sql = "SELECT * FROM user WHERE super_invite_code = '" + wxId + "'";
+        List<UserModel> list = new ArrayList<>();
+        List<Map<String, Object>> mapArrayList = jdbcTemplate.queryForList(sql);
+        if (mapArrayList != null && mapArrayList.size() > 0) {
+            for (int i = 0; i < mapArrayList.size(); i++) {
+                UserModel userModel = new UserModel();
+                userModel.setId((Integer) mapArrayList.get(i).get("id"));
+                userModel.setHeadImg((String) mapArrayList.get(i).get("head_img"));
+                userModel.setWxId((String) mapArrayList.get(i).get("wx_id"));
+                userModel.setSuperInviteCode((String) mapArrayList.get(i).get("super_invite_code"));
+                list.add(userModel);
+            }
+        }
+        return list;
+    }
 }

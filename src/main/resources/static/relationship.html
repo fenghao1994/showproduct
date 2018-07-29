@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Paging</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+
+		<link rel="stylesheet" href="plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="css/global.css" media="all">
+		<link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+		<script src="https://cdn.bootcss.com/angular.js/1.6.3/angular.min.js"></script>
+	</head>
+
+	<body>
+		<div style="margin: 15px;">
+			
+			<fieldset class="layui-elem-field">
+				<legend>关系图谱</legend>
+				<div class="layui-field-box" ng-app="userInvite" ng-controller="getUserInvite" ng-init="load()">
+					<div>
+						<p>第一级</p>
+						<table class="site-table table-hover">
+							<thead>
+								<tr>
+									<!-- <th><input type="checkbox" id="selected-all"></th> -->
+									<th>微信ID</th>
+								</tr>
+							</thead>
+							<!--内容容器-->
+							<tbody id="con" >
+								<tr ng-repeat = "x in relationShip.firstLevel">
+									<!-- <td><input type="checkbox"></td> -->
+									<td>{{x.wxId}}</td>
+									<!--<td>-->
+										<!--&lt;!&ndash;<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>&ndash;&gt;-->
+										<!--&lt;!&ndash;<a href="/edituser.html?id={{x.id}}" class="layui-btn layui-btn-mini">编辑</a>&ndash;&gt;-->
+										<!--<a ng-click="editProd(x.id)" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">编辑</a>-->
+									<!--</td>-->
+								</tr>
+							</tbody>
+						</table>
+
+						<p>第二级</p>
+						<table class="site-table table-hover1">
+							<thead>
+							<tr>
+								<!-- <th><input type="checkbox" id="selected-all"></th> -->
+								<th>微信ID</th>
+							</tr>
+							</thead>
+							<!--内容容器-->
+							<tbody id="con1" >
+							<tr ng-repeat = "x in relationShip.secondLevel">
+								<!-- <td><input type="checkbox"></td> -->
+								<td>{{x.wxId}}</td>
+								<!--<td>-->
+								<!--&lt;!&ndash;<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>&ndash;&gt;-->
+								<!--&lt;!&ndash;<a href="/edituser.html?id={{x.id}}" class="layui-btn layui-btn-mini">编辑</a>&ndash;&gt;-->
+								<!--<a ng-click="editProd(x.id)" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">编辑</a>-->
+								<!--</td>-->
+							</tr>
+							</tbody>
+						</table>
+						<!--分页容器-->
+						<div id="paged"></div>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		<!--模板-->
+		<script type="text/html" id="conTemp">
+			{{# layui.each(d.list, function(index, item){ }}
+			<tr>
+				<!--<td><input type="checkbox"></td>-->
+				<td>{{ item.name }}</td>
+				<td>{{ item.age }}</td>
+				<td>{{ item.createtime }}</td>
+				<td>
+					<!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>-->
+				<!--	<a href="/manage/article_edit_1" class="layui-btn layui-btn-mini">编辑</a>-->
+					<a href="javascript:;" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+				</td>
+			</tr>
+			{{# }); }}
+		</script>
+		<script type="text/javascript" src="plugins/layui/layui.js"></script>
+		<script>
+			var app = angular.module('userInvite', []);
+			app.config(function ($httpProvider) {
+				$httpProvider.defaults.headers.common = { 'Content-Type' : 'application/x-www-form-urlencoded' }
+			});
+			app.controller('getUserInvite', function($scope, $http){
+                var wxId = getUrlParam("wxId")
+				$scope.load = function() {
+					$http({
+						method: 'POST',
+						data: "wxId=" + wxId,
+						url:'user/getRelationship',
+                        headers:{"Content-Type": "application/x-www-form-urlencoded"}
+					}).then(function successCallback(response){
+						$scope.relationShip = response.data;
+					},function errorCallback(response){
+					    console.log(response)
+						alert("请求错误")
+					});
+				}
+			});
+
+            function getUrlParam(name)
+            {
+                var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+                var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+                if (r!=null) return unescape(r[2]); return null; //返回参数值
+            }
+		</script>
+	</body>
+
+</html>

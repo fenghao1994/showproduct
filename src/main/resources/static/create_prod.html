@@ -1,0 +1,406 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>项目信息</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript" charset="utf-8" src="ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="ueditor.all.min.js"> </script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" charset="utf-8" src="jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+    <style type="text/css">
+        div{
+            width:100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="input-group">
+    <span class="input-group-addon">项目名称</span>
+    <input th:type="text" class="form-control" id="proName"
+           aria-describedby="basic-addon3" th:name="proName"
+           th:value="${model.proName}" required="required">
+</div>
+<br>
+
+<div class="input-group">
+    <span class="input-group-addon">项目简单描述</span>
+    <input th:type="text" class="form-control" id="proSimDesc"
+           aria-describedby="basic-addon3" th:name="proSimDesc"
+           th:value="${model.proSimDesc}" required="required">
+</div>
+<br>
+<div class="input-group">
+    <span class="input-group-addon">项目评级: 比如: A 或者 B 或者 B+ 或者不填</span>
+    <input th:type="text" class="form-control" id="proGrade"
+           aria-describedby="basic-addon3" th:name="proGrade"
+           th:value="${model.proGrade}">
+</div>
+<br>
+<div class="input-group">
+    <span class="input-group-addon">项目是否火热: 填入true 表示 火热 填入 false 或者不填 不火热，不展示此标签</span>
+    <input th:type="text" class="form-control" id="isHot"
+           aria-describedby="basic-addon3" th:name="isHot"
+           th:value="${model.isHot}">
+</div>
+<br>
+<div class="input-group">
+    <span class="input-group-addon">开始收集时间:格式为 yyyy-MM-dd HH:hh 2018-08-08 08:08  或者不填</span>
+    <input th:type="text" class="form-control" id="startTime"
+           aria-describedby="basic-addon3" th:name="startTime"
+           th:value="${model.startTime}">
+</div>
+<br>
+<div class="input-group">
+    <span class="input-group-addon">结束收集时间:格式为 yyyy-MM-dd HH:hh 2018-08-08 08:08  或者不填</span>
+    <input th:type="text" class="form-control" id="endTime"
+           aria-describedby="basic-addon3" th:name="endTime"
+           th:value="${model.endTime}">
+</div>
+<br>
+<!--项目名称<input id="proName" th:type="text" th:name="proName" th:value="${model.proName}"/><br>-->
+<!--项目简单描述<input id="proSimDesc" th:type="text" th:name="proSimDesc" th:value="${model.proSimDesc}"><br>-->
+<!--项目评级<input id ="proGrade" th:type="text" th:name="proGrade" th:value="${model.proGrade}"><br>-->
+<!--项目是否火热<input id="isHot" th:type="text" th:name="isHot" th:value="${model.isHot}"><br>-->
+
+<!--开始收集时间<input id="startTime" th:type="text" th:name="startTime" th:value="${model.startTime}"><br>-->
+<!--结束收集时间<input id="endTime" th:type="text" th:name="endTime" th:value="${model.endTime}"><br>-->
+
+
+<form method="post" id="imgform" enctype="multipart/form-data" action="dy_upload_image.jspx">
+    <div class="input-group">
+    <span class="input-group-addon">项目图标</span>
+    <input type="file" name="uploadImage" id="uploadImage" class="form-control">
+
+    <input type="button" onclick="gosubmit()" id="imgbtn" value="点这里上传图片"/>
+    </div>
+</form>
+<br>
+<div class="input-group">
+    <span class="input-group-addon">项目图标地址:(上传成功后显示图片地址)</span>
+    <input th:type="text" class="form-control" id="iconUrl"
+           aria-describedby="basic-addon3" th:name="iconUrl" readonly="true">
+</div>
+<!--<input id="iconUrl" th:type="text" th:name="iconUrl" ><br>-->
+<br>
+
+<form  method="post" id="proImgform" enctype="multipart/form-data" action="dy_upload_image.jspx" >
+    <div class="input-group">
+        <span class="input-group-addon">展示页面 项目大图片</span>
+        <input type="file" name="proImg" id="proImg" class="form-control">
+        <input type="button" onclick="proImgSubmit()" id="probtn" value="点这里上传图片"/>
+    </div>
+</form>
+<br>
+<div class="input-group">
+    <span class="input-group-addon">项目大图地址:(上传成功后显示图片地址)</span>
+    <input th:type="text" class="form-control" id="proImgUrl"
+           aria-describedby="basic-addon3" th:name="proImgUrl" readonly="true">
+</div>
+<!--<input id="proImgUrl" th:type="text" th:name="proImgUrl"><br>-->
+<br>
+
+<div class="input-group">
+    <span class="input-group-addon">项目标签: 比如 公链|DAPP 多个标签 以 | 分割 （英文符号的 |）</span>
+    <input th:type="text" class="form-control" id="proLabel"
+           aria-describedby="basic-addon3" th:name="proLabel"
+           th:value="${model.proLabel}">
+</div>
+<br>
+
+<div class="input-group">
+    <span class="input-group-addon">项目类型： 填入数字即可 1 进行中 2即将开始 3 已经结束 4 投票</span>
+    <input th:type="text" class="form-control" id="proType"
+           aria-describedby="basic-addon3" th:name="proType"
+           th:value="${model.proType}" required="required">
+</div>
+<br>
+<div class="input-group">
+    <span class="input-group-addon">备注</span>
+    <input th:type="text" class="form-control" id="marks"
+           aria-describedby="basic-addon3" th:name="marks"
+           th:value="${model.marks}">
+</div>
+<br>
+<div class="input-group">
+    <span class="input-group-addon">项目真实额度</span>
+    <input th:type="text" class="form-control" id="proRealLimit"
+           aria-describedby="basic-addon3" th:name="proRealLimit"
+           th:value="${model.proRealLimit}">
+</div>
+<br>
+<div class="input-group">
+    <span class="input-group-addon">项目假额度</span>
+    <input th:type="text" class="form-control" id="proMockLimit"
+           aria-describedby="basic-addon3" th:name="proMockLimit"
+           th:value="${model.proMockLimit}">
+</div>
+<br>
+<div class="input-group">
+    <span class="input-group-addon">收币地址</span>
+    <input th:type="text" class="form-control" id="collectionCoinAddress"
+           aria-describedby="basic-addon3" th:name="collectionCoinAddress"
+           th:value="${model.collectionCoinAddress}">
+</div>
+<br>
+<div class="input-group">
+    <span class="input-group-addon">是否停止收币：停止 填入true 其他选择不填或者 填入 false</span>
+    <input th:type="text" class="form-control" id="isStopCollection"
+           aria-describedby="basic-addon3" th:name="isStopCollection"
+           th:value="${model.isStopCollection}">
+</div>
+<br>
+<div class="input-group">
+    <span class="input-group-addon">是否删除： 删除 填入 true 其他选择 不填或者 填入 false</span>
+    <input th:type="text" class="form-control" id="isDelete"
+           aria-describedby="basic-addon3" th:name="isDelete"
+           th:value="${model.isDelete}">
+</div>
+<!--项目标签<input id="prolabel" th:type="text" th:name="proLabel" th:value="${model.proLabel}"><br>-->
+<!--项目类型<input id="proType" th:type="text" th:name="proType" th:value="${model.proType}"><br>-->
+<!--备注<input id="marks" th:type="text" th:name="marks" th:value="${model.marks}"><br>-->
+<!--项目真实额度<input id="proRealLimit" th:type="text" th:name="proRealLimit" th:value="${model.proRealLimit}"><br>-->
+<!--项目假额度<input id="proMockLimit" th:type="text" th:name="proMockLimit" th:value="${model.proMockLimit}"><br>-->
+<!--收币地址<input id="collectionCoinAddress" th:type="text" th:name="collectionCoinAddress" th:value="${model.collectionCoinAddress}"><br>-->
+<!--是否停止收币<input id="isStopCollection" th:type="text" th:name="isStopCollection" th:value="${model.isStopCollection}"><br>-->
+<!--是否删除<input id="isDelete" th:type="text" th:name="isDelete" th:value="${model.isDelete}"><br>-->
+<br>
+<div class="input-group">
+    <span class="input-group-addon">项目详细描述 必填</span>
+</div>
+<br>
+<div>
+    <script id="editor" type="text/plain" style="width:1024px;height:500px;"></script>
+</div>
+<br>
+<div class="input-group">
+    <input id=submit th:type="submit" value="提交" class="form-control" aria-describedby="basic-addon3">
+    </div>
+
+
+
+<script type="text/javascript">
+
+    //实例化编辑器
+    //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+    var ue = UE.getEditor('editor');
+
+    UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+    UE.Editor.prototype.getActionUrl = function(action) {
+        if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadimage') {
+            return '/imgUpdate'; //在这里返回我们实际的上传图片地址
+        } else {
+            return this._bkGetActionUrl.call(this, action);
+        }
+    }
+
+    function isFocus(e){
+        alert(UE.getEditor('editor').isFocus());
+        UE.dom.domUtils.preventDefault(e)
+    }
+    function setblur(e){
+        UE.getEditor('editor').blur();
+        UE.dom.domUtils.preventDefault(e)
+    }
+    function insertHtml() {
+        var value = prompt('插入html代码', '');
+        UE.getEditor('editor').execCommand('insertHtml', value)
+    }
+    function createEditor() {
+        enableBtn();
+        UE.getEditor('editor');
+    }
+    function getAllHtml() {
+        alert(UE.getEditor('editor').getAllHtml())
+        console.log(UE.getEditor('editor').getAllHtml())
+    }
+    function getContent() {
+        var arr = [];
+        arr.push("使用editor.getContent()方法可以获得编辑器的内容");
+        arr.push("内容为：");
+        arr.push(UE.getEditor('editor').getContent());
+        alert(arr.join("\n"));
+    }
+    function getPlainTxt() {
+        var arr = [];
+        arr.push("使用editor.getPlainTxt()方法可以获得编辑器的带格式的纯文本内容");
+        arr.push("内容为：");
+        arr.push(UE.getEditor('editor').getPlainTxt());
+        alert(arr.join('\n'))
+    }
+    function setContent(isAppendTo) {
+        var arr = [];
+        arr.push("使用editor.setContent('欢迎使用ueditor')方法可以设置编辑器的内容");
+        UE.getEditor('editor').setContent('欢迎使用ueditor', isAppendTo);
+        alert(arr.join("\n"));
+    }
+    function setDisabled() {
+        UE.getEditor('editor').setDisabled('fullscreen');
+        disableBtn("enable");
+    }
+
+    function setEnabled() {
+        UE.getEditor('editor').setEnabled();
+        enableBtn();
+    }
+
+    function getText() {
+        //当你点击按钮时编辑区域已经失去了焦点，如果直接用getText将不会得到内容，所以要在选回来，然后取得内容
+        var range = UE.getEditor('editor').selection.getRange();
+        range.select();
+        var txt = UE.getEditor('editor').selection.getText();
+        alert(txt)
+    }
+
+    function getContentTxt() {
+        var arr = [];
+        arr.push("使用editor.getContentTxt()方法可以获得编辑器的纯文本内容");
+        arr.push("编辑器的纯文本内容为：");
+        arr.push(UE.getEditor('editor').getContentTxt());
+        alert(arr.join("\n"));
+    }
+    function hasContent() {
+        var arr = [];
+        arr.push("使用editor.hasContents()方法判断编辑器里是否有内容");
+        arr.push("判断结果为：");
+        arr.push(UE.getEditor('editor').hasContents());
+        alert(arr.join("\n"));
+    }
+    function setFocus() {
+        UE.getEditor('editor').focus();
+    }
+    function deleteEditor() {
+        disableBtn();
+        UE.getEditor('editor').destroy();
+    }
+    function disableBtn(str) {
+        var div = document.getElementById('btns');
+        var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
+        for (var i = 0, btn; btn = btns[i++];) {
+            if (btn.id == str) {
+                UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
+            } else {
+                btn.setAttribute("disabled", "true");
+            }
+        }
+    }
+    function enableBtn() {
+        var div = document.getElementById('btns');
+        var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
+        for (var i = 0, btn; btn = btns[i++];) {
+            UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
+        }
+    }
+
+    function getLocalData () {
+        alert(UE.getEditor('editor').execCommand( "getlocaldata" ));
+    }
+
+    function clearLocalData () {
+        UE.getEditor('editor').execCommand( "clearlocaldata" );
+        alert("已清空草稿箱")
+    }
+
+
+    $(function () {
+        $('#submit').click(function () {
+            var proName = $("#proName").val()
+            if (proName === '' || proName === 'null' || proName === "") {
+                alert("项目名称不能为空")
+                return
+            }
+            var proSimDesc = $("#proSimDesc").val()
+            if (proSimDesc === '' || proSimDesc === 'null' || proSimDesc === "") {
+                alert("项目简单描述不能为空")
+                return
+            }
+            var htmlContent = UE.getEditor('editor').getContent()
+            if (htmlContent === '' || htmlContent === 'null' || htmlContent === "") {
+                alert("项目想起描述不能为空")
+                return
+            }
+            $.ajax({
+                url: "/prod/create/product",
+                type: "post",
+                dataType: "json",
+                data: {
+                    proName: $("#proName").val(),
+                    proSimDesc: $("#proSimDesc").val(),
+                    proGrade: $("#proGrade").val(),
+                    isHot: $("#isHot").val(),
+                    startTime: $("#startTime").val(),
+                    endTime: $("#endTime").val(),
+                    iconUrl: $("#iconUrl").val(),
+                    proImgUrl: $("#proImgUrl").val(),
+                    proLabel: $("#proLabel").val(),
+                    proType: $("#proType").val(),
+                    marks: $("#marks").val(),
+                    proRealLimit: $("#proRealLimit").val(),
+                    proMockLimit: $("#proMockLimit").val(),
+                    collectionCoinAddress: $("#collectionCoinAddress").val(),
+                    isStopCollection: $("#isStopCollection").val(),
+                    isDelete: $("#isDelete").val(),
+                    proRecommend: UE.getEditor('editor').getAllHtml()
+                },
+                success:function(response){
+                    alert("提交成功");
+                    console.log(response)
+                },
+                error:function(response) {
+                    alert("提交失败")
+                    console.log(response)
+                }
+            })
+        })
+    })
+
+
+function gosubmit() {
+    var formdata = new FormData();
+    formdata.append('uploadImage', $('#uploadImage').get(0).files[0]);
+    $.ajax({
+        url: '/uploadImg',
+        type: 'post',
+        contentType: false,
+        data: formdata,
+        processData: false,
+        success: function (path) {
+            $("#iconUrl").attr('value', path);
+        },
+        error: function (err) {
+            console.log(err)
+        }
+    });
+}
+
+function proImgSubmit() {
+    var proformdata = new FormData();
+    proformdata.append('uploadImage', $('#proImg').get(0).files[0]);
+    $.ajax({
+        url: '/uploadImg',
+        type: 'post',
+        contentType: false,
+        data: proformdata,
+        processData: false,
+        success: function (path) {
+            $("#proImgUrl").attr('value', path);
+        },
+        error: function (err) {
+            console.log(err)
+        }
+    });
+}
+</script>
+</body>
+</html>

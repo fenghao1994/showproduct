@@ -1,5 +1,8 @@
 package com.shfound.showproduct.model;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -32,11 +35,11 @@ public class ProductInfoModel {
 
     //开始收集时间
     @Column
-    private long startTime;
+    private String startTime;
 
     //结束收集时间
     @Column
-    private long endTime;
+    private String endTime;
 
     //项目小图片  icon url
     @Column
@@ -77,11 +80,11 @@ public class ProductInfoModel {
     private boolean isStopCollection;
 
     //创建时间
-    @Column
+    @CreatedDate
     private Date createTime;
 
     //修改时间
-    @Column
+    @LastModifiedDate
     private Date editTime;
 
     @Column
@@ -131,20 +134,20 @@ public class ProductInfoModel {
         isHot = hot;
     }
 
-    public long getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(long startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
+    public String getEndTime() {
+        return endTime;
     }
 
-    public long getEndTime() {
-        return endTime;
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public String getIconUrl() {

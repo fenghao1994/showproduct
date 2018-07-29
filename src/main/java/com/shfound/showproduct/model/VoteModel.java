@@ -1,5 +1,8 @@
 package com.shfound.showproduct.model;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -24,11 +27,11 @@ public class VoteModel {
     private double prodLimit;
 
     //创建时间
-    @Column
+    @CreatedDate
     private Date createTime;
 
     //修改时间
-    @Column
+    @LastModifiedDate
     private Date editTime;
 
     public int getId() {
