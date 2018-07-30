@@ -13,10 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,17 +29,30 @@ public class UserController {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @RequestMapping(value = "/invitation")
+    public String invitationWithoutId(Model model) {
+        model.addAttribute("code", "");
+        return "inviteuser";
+    }
+
+    @RequestMapping(value = "/invitation/{id}")
+    public String invitation(@PathVariable("id")String id, Model model) {
+        if (id == null) {
+            id = "";
+        }
+        model.addAttribute("code", id);
+        return "inviteuser";
+    }
+
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<SuccessResult<UserResult>> register(@RequestParam(value = "mobile", required = false) String mobile, @RequestParam(value = "wxId") String wxId, @RequestParam("password") String password, @RequestParam(value = "super_invite_code", required = false)String superInviteCode) {
+    public ResponseEntity<SuccessResult<UserResult>> register(@RequestParam(value = "wxId") String wxId, @RequestParam("password") String password, @RequestParam(value = "super_invite_code")String superInviteCode) {
         SuccessResult<UserResult> successResult = new SuccessResult<>();
         UserResult userResult = new UserResult();
         if (Strings.isEmpty(wxId)) {
             setUserResultAttr(userResult, 1001, "微信号不能为空");
-        } else if (Strings.isEmpty(mobile) && !Utils.isMobilePhone(mobile)) {
-            setUserResultAttr(userResult, 1001, "手机号错误");
         } else {
             UserModel userModel = new UserModel();
-            userModel.setMobile(mobile);
+            userModel.setWxId(wxId);
             userModel.setPassword(password);
             int resultCode = userService.register(userModel);
             switch (resultCode) {

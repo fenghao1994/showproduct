@@ -25,6 +25,7 @@ public class ImageUploadController {
                                   required = false) MultipartFile file) {
         try {
             if (file == null) {
+                response.setCharacterEncoding("UTF-8");
                 response.getWriter().write("图片不能为空");
             } else {
                 String fileName = file.getOriginalFilename();

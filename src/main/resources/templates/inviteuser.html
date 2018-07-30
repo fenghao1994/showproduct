@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>邀请返佣</title>
+    <!--<script type="text/javascript" charset="utf-8" src="jquery-3.3.1.min.js"></script>-->
+
+    <!--&lt;!&ndash; 最新的 Bootstrap 核心 JavaScript 文件 &ndash;&gt;-->
+    <!--<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"-->
+            <!--integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"-->
+            <!--crossorigin="anonymous"></script>-->
+    <!--&lt;!&ndash; 最新版本的 Bootstrap 核心 CSS 文件 &ndash;&gt;-->
+    <!--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"-->
+          <!--integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<!--<div class="embed-responsive embed-responsive-16by9">-->
+    <!--<iframe class="embed-responsive-item" src="inner_invite.html"></iframe>-->
+<!--</div>-->
+
+<span class="label label-success">说明</span>
+<p>微信ID说明</p>
+
+<form action="/user/register" , method="post" onsubmit="return toVaild()">
+    <div class="input-group">
+        <span class="input-group-addon" id="label1">微信ID</span>
+        <input type="text" class="form-control" name="wxId" required="required" id="wxId"
+               aria-describedby="basic-addon3">
+    </div>
+
+    <div class="input-group">
+        <span class="input-group-addon" id="label2">密码  </span>
+        <input type="password" class="form-control" name="password" required="required" id="password"
+               aria-describedby="basic-addon3">
+    </div>
+
+    <div class="input-group">
+        <span class="input-group-addon" id="label3">确认密码</span>
+        <input type="password" class="form-control" name="repassword" required="required" id="repassword"
+               aria-describedby="basic-addon3">
+    </div>
+
+    <div class="input-group">
+        <span class="input-group-addon" id="label4">邀请码 </span>
+        <input type="text" class="form-control" name="super_invite_code" required="required" id="super_invite_code"
+               aria-describedby="basic-addon3" th:value="${code}">
+    </div>
+
+    <input th:type="submit" th:value="注册">
+</form>
+<script language="javascript">
+    function toVaild() {
+        var pw1 = document.getElementById("password").value;
+        var pw2 = document.getElementById("repassword").value;
+        if(pw1.equals(pw2)) {
+            return true;
+        } else {
+            alert("密码不一致，请重新修改");
+            return false;
+        }
+    }
+</script>
+
+</body>
+</html>
