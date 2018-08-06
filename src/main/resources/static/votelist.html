@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Paging</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+
+		<link rel="stylesheet" href="plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="css/global.css" media="all">
+		<link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+		<script src="https://cdn.bootcss.com/angular.js/1.6.3/angular.min.js"></script>
+	</head>
+
+	<body>
+		<div style="margin: 15px;">
+			
+			<fieldset class="layui-elem-field">
+				<legend>投票用户列表</legend>
+				<div class="layui-field-box" ng-app="voteapp" ng-controller="getVote">
+					<div>
+						<form >
+							<input type="text" ng-model="voteid"/>
+							<button type="button" id="search" ng-click="getVote(voteid)">根据项目ID搜索</button>
+						</form>
+						<p>总量: {{vote.amount}}</p>
+						<table class="site-table table-hover">
+							<thead>
+								<tr>
+									<!-- <th><input type="checkbox" id="selected-all"></th> -->
+									<th>微信id</th>
+									<th>额度</th>
+								</tr>
+							</thead>
+							<!--内容容器-->
+							<tbody id="con" >
+								<tr ng-repeat = "x in vote.voteModels">
+									<!-- <td><input type="checkbox"></td> -->
+									<td>{{x.wxId}}</td>
+									<td>{{x.prodLimit}}</td>
+								</tr>
+							</tbody>
+						</table>
+						<!--分页容器-->
+						<div id="paged"></div>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		<!--模板-->
+		<script type="text/html" id="conTemp">
+			{{# layui.each(d.list, function(index, item){ }}
+			<tr>
+				<!--<td><input type="checkbox"></td>-->
+				<td>{{ item.name }}</td>
+				<td>{{ item.age }}</td>
+				<td>{{ item.createtime }}</td>
+				<td>
+					<!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>-->
+				<!--	<a href="/manage/article_edit_1" class="layui-btn layui-btn-mini">编辑</a>-->
+					<a href="javascript:;" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+				</td>
+			</tr>
+			{{# }); }}
+		</script>
+		<script type="text/javascript" src="plugins/layui/layui.js"></script>
+		<script>
+			var app = angular.module('voteapp', []);
+			app.config(function ($httpProvider) {
+				$httpProvider.defaults.headers.common = { 'Content-Type' : 'application/x-www-form-urlencoded' }
+			});
+			app.controller('getVote', function($scope, $http){
+                $scope.getVote = function (voteid) {
+                    $http({
+                        method: 'POST',
+                        url: 'vote/getVote',
+                        data: "prodId=" + voteid,
+                        headers:{"Content-Type": "application/x-www-form-urlencoded"}
+                    }).then(function successCallback(response) {
+                        console.info(response.data);
+                        $scope.vote = response.data;
+
+                    }, function errorCallback(response) {
+                        alert("搜索无结果")
+                    })
+                }
+			});
+		</script>
+	</body>
+
+</html>

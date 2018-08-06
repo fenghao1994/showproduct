@@ -67,33 +67,13 @@ public class VoteService {
                 voteModel.setCreateTime((Date) mapArrayList.get(i).get("create_time"));
                 voteModel.setEditTime((Date) mapArrayList.get(i).get("end_time"));
                 voteModelList.add(voteModel);
-
             }
         }
-
-        String sql1 = "SELECT * FROM product_info WHERE id = ?";
-        RowMapper<ProductInfoModel> rowMapper = new BeanPropertyRowMapper<>(ProductInfoModel.class);
-        ProductInfoModel productInfoModel;
-        try {
-            productInfoModel = jdbcTemplate.queryForObject(sql1, rowMapper, prodId);
-        } catch (Exception e) {
-            productInfoModel = null;
-        }
-        if (productInfoModel != null && productInfoModel.getProName() != null && !productInfoModel.getProName().isEmpty())
-            voteResult.setProdName(productInfoModel.getProName());
-        List<String> mobiles = new ArrayList<>();
-        List<Integer> limits = new ArrayList<>();
-        double amount = 0;
+        int amount = 0;
         for (VoteModel voteModel : voteModelList) {
-            String sql2 = "SELECT * FROM user WHERE wx_id = ?";
-            RowMapper<UserModel> rowMapper1 = new BeanPropertyRowMapper<>(UserModel.class);
-            UserModel userModel = jdbcTemplate.queryForObject(sql2, rowMapper1, voteModel.getWxId());
-            mobiles.add(userModel.getWxId());
-            limits.add(voteModel.getProdLimit());
             amount += voteModel.getProdLimit();
         }
-        voteResult.setUserLimits(limits);
-        voteResult.setUserMobiles(mobiles);
+        voteResult.setVoteModels(voteModelList);
         voteResult.setAmount(amount);
         return voteResult;
     }

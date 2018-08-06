@@ -42,13 +42,9 @@ public class VoteController {
     }
 
     @RequestMapping(value = "/getVote", method = RequestMethod.POST)
-    public ResponseEntity<SuccessResult<VoteResult>> getVote(@RequestParam("prodId") int proId) {
-        VoteResult allVote = voteService.getAllVote(proId);
-        SuccessResult successResult = new SuccessResult();
-        successResult.setCode(1000);
-        successResult.setMessage("响应成功");
-        successResult.setDate(allVote);
-        return new ResponseEntity<>(successResult, HttpStatus.OK);
+    public ResponseEntity<VoteResult> getVote(@RequestParam("prodId") String proId) {
+        VoteResult allVote = voteService.getAllVote(Integer.parseInt(proId));
+        return new ResponseEntity<>(allVote, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/client/getVote", method = RequestMethod.POST)

@@ -19,7 +19,7 @@ import java.io.UnsupportedEncodingException;
 
 
 @Component
-@WebFilter(urlPatterns = {"/vote/*", "/user/update/headimg"}, filterName = "tokenAuthorFilter")
+@WebFilter(urlPatterns = {"/user/update/headimg"}, filterName = "tokenAuthorFilter")
 public class TokenAuthorFilter implements Filter {
 
     Logger logger = LoggerFactory.getLogger(TokenAuthorFilter.class);
