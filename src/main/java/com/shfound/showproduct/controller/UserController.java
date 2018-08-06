@@ -8,12 +8,14 @@ import com.shfound.showproduct.service.UserService;
 import com.shfound.showproduct.util.Utils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,6 +30,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private Environment env;
 
     @RequestMapping(value = "/invitation")
     public String invitationWithoutId(Model model) {
@@ -45,7 +49,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<SuccessResult<UserResult>> register(@RequestParam(value = "wxId") String wxId, @RequestParam("password") String password, @RequestParam(value = "super_invite_code")String superInviteCode) {
+    public ResponseEntity<SuccessResult<UserResult>> register(@RequestParam(value = "wxId") String wxId, @RequestParam("password") String password,@RequestParam("mobile") String mobile, @RequestParam(value = "super_invite_code")String superInviteCode) {
         SuccessResult<UserResult> successResult = new SuccessResult<>();
         UserResult userResult = new UserResult();
         if (Strings.isEmpty(wxId)) {
@@ -54,6 +58,8 @@ public class UserController {
             UserModel userModel = new UserModel();
             userModel.setWxId(wxId);
             userModel.setPassword(password);
+            userModel.setMobile(mobile);
+            userModel.setSuperInviteCode(superInviteCode);
             int resultCode = userService.register(userModel);
             switch (resultCode) {
                 case 1000:
@@ -81,7 +87,7 @@ public class UserController {
             setUserResultAttr(userResult, 1001, "微信号不能为空");
         } else {
             UserModel userModel = new UserModel();
-            userModel.setMobile(wxId);
+            userModel.setWxId(wxId);
             userModel.setPassword(password);
             int resultCode = userService.login(userModel);
             switch (resultCode) {
@@ -95,28 +101,33 @@ public class UserController {
                 case 1002:
                     setUserResultAttr(userResult, 1001, "密码错误");
                     break;
+                case 1003:
+                    setUserResultAttr(userResult, 1002, "填入手机号");
+                    setRedis(userResult, wxId);
+                    break;
             }
         }
         setSuccessResult(successResult, userResult);
         return new ResponseEntity<>(successResult, HttpStatus.OK);
     }
 
-    private void setRedis(UserResult userResult, String mobile) {
+    private void setRedis(UserResult userResult, String wxId) {
         String token = UUID.randomUUID().toString();
-        stringRedisTemplate.opsForValue().set(token, mobile, 2L, TimeUnit.DAYS);
+        stringRedisTemplate.opsForValue().set(token, wxId, 2L, TimeUnit.DAYS);
         userResult.setToken(token);
     }
 
     @RequestMapping(value = "/update/password", method = RequestMethod.POST)
-    public ResponseEntity<SuccessResult<UserResult>> updatePassword(@RequestParam("mobile") String mobile, @RequestParam("password") String password) {
+    public ResponseEntity<SuccessResult<UserResult>> updatePassword(@RequestParam("wxId") String wxId, @RequestParam("password") String password, @RequestParam("mobile") String mobile) {
         SuccessResult<UserResult> successResult = new SuccessResult<>();
         UserResult userResult = new UserResult();
-        if (!Utils.isMobilePhone(mobile)) {
-            setUserResultAttr(userResult, 1001, "手机号错误");
+        if (StringUtils.isEmpty(wxId)) {
+            setUserResultAttr(userResult, 1001, "微信账号错误");
         } else {
             UserModel userModel = new UserModel();
-            userModel.setMobile(mobile);
+            userModel.setWxId(wxId);
             userModel.setPassword(password);
+            userModel.setMobile(mobile);
             int resultCode = userService.updateUserPassword(userModel);
             switch (resultCode) {
                 case 1000:
@@ -127,6 +138,9 @@ public class UserController {
                     break;
                 case 1002:
                     setUserResultAttr(userResult, 1001, "修改密码失败");
+                    break;
+                case 1003:
+                    setUserResultAttr(userResult, 1001, "输入手机号与绑定手机号不匹配");
                     break;
             }
         }
@@ -207,5 +221,36 @@ public class UserController {
         CustomerResult customerResult = userService.getCustomerResult(wxId);
 
         return new ResponseEntity<>(customerResult, HttpStatus.OK);
+    }
+
+    /**
+     * 更新手机号
+     */
+    @RequestMapping(value = "/mobile", method = RequestMethod.POST)
+    public ResponseEntity<UserResult> updateMobile(@RequestParam("wxId")String wxId, @RequestParam("mobile")String mobile) {
+        int index = userService.updateMobile(wxId, mobile);
+        UserResult userResult = new UserResult();
+        if (index >= 0) {
+            userResult.setCode(1000);
+            userResult.setMsg("绑定成功");
+        } else {
+            userResult.setCode(1001);
+            userResult.setMsg("绑定失败，请联系客服");
+        }
+        return new ResponseEntity<>(userResult, HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value = "/shareurl", method = RequestMethod.POST)
+    public ResponseEntity<SuccessResult<UserResult>> getShareUrl(@RequestParam("wxId")String wxId) {
+        String root = env.getProperty("web.router");
+        UserResult userResult = new UserResult();
+        userResult.setCode(1000);
+        String shareUrl = root + "invitation/" + wxId;
+        userResult.setMsg(shareUrl);
+        SuccessResult successResult = new SuccessResult();
+        successResult.setDate(userResult);
+        successResult.setCode(1000);
+        return new ResponseEntity<>(successResult, HttpStatus.OK);
     }
 }

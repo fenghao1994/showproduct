@@ -64,7 +64,7 @@ public class UserService {
     /**
      * 登陆
      *
-     * @param userModel 1000 登陆成功 1001 用户不存在 1002 密码错误
+     * @param userModel 1000 登陆成功 1001 用户不存在 1002 密码错误 1003 填入手机号
      * @return
      */
     public int login(UserModel userModel) {
@@ -72,8 +72,10 @@ public class UserService {
         if (user == null) {
             return 1001;
         } else {
-            if (userModel.getPassword().equals(user.getPassword())) {
+            if (userModel.getPassword().equals(user.getPassword()) && !StringUtils.isEmpty(user.getMobile())) {
                 return 1000;
+            } else if (userModel.getPassword().equals(user.getPassword()) && StringUtils.isEmpty(user.getMobile())){
+                return 1003;
             } else {
                 return 1002;
             }
@@ -83,7 +85,7 @@ public class UserService {
     /**
      * 修改用户密码
      *
-     * @param userModel 1000 修改成功 1001 用户不存在  1002修改失败
+     * @param userModel 1000 修改成功 1001 用户不存在  1002修改失败 1003手机号不匹配
      * @return
      */
     public int updateUserPassword(UserModel userModel) {
@@ -91,8 +93,11 @@ public class UserService {
         if (user == null) {
             return 1001;
         } else {
+            if (!user.getMobile().equals(userModel.getMobile())) {
+                return 1003;
+            }
             int index = updatePassword(userModel);
-            if (index >= 0) {
+            if (index > 0) {
                 return 1000;
             } else {
                 return 1002;
@@ -101,8 +106,8 @@ public class UserService {
     }
 
     private int updatePassword(UserModel userModel) {
-        String sql = "UPDATE user SET password = ? WHERE mobile = ?";
-        int update = jdbcTemplate.update(sql, new Object[]{userModel.getPassword(), userModel.getMobile()});
+        String sql = "UPDATE user SET password = ? WHERE wx_id = ?";
+        int update = jdbcTemplate.update(sql, new Object[]{userModel.getPassword(), userModel.getWxId()});
         return update;
     }
 
@@ -193,5 +198,17 @@ public class UserService {
             }
         }
         return list;
+    }
+
+    public int updateMobile(String wxId, String mobile) {
+        UserModel userModel = new UserModel();
+        userModel.setWxId(wxId);
+        UserModel exite = isExite(userModel);
+        if (exite != null) {
+            String sql = "UPDATE user SET mobile = ? WHERE wx_id = ?";
+            int update = jdbcTemplate.update(sql, new Object[]{mobile, wxId});
+            return update;
+        }
+        return -1;
     }
 }

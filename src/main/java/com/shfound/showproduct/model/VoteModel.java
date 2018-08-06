@@ -17,14 +17,14 @@ public class VoteModel {
     private int id;
 
     @Column
-    private int userId;
+    private String wxId;
 
     @Column
     private int prodId;
 
     //个人预投额度
     @Column
-    private double prodLimit;
+    private int prodLimit;
 
     //创建时间
     @CreatedDate
@@ -42,12 +42,12 @@ public class VoteModel {
         this.id = id;
     }
 
-    public int getUserId() {
-        return userId;
+    public String getWxId() {
+        return wxId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setWxId(String wxId) {
+        this.wxId = wxId;
     }
 
     public int getProdId() {
@@ -58,11 +58,11 @@ public class VoteModel {
         this.prodId = proId;
     }
 
-    public double getProdLimit() {
+    public int getProdLimit() {
         return prodLimit;
     }
 
-    public void setProdLimit(double prodLimit) {
+    public void setProdLimit(int prodLimit) {
         this.prodLimit = prodLimit;
     }
 

@@ -30,7 +30,7 @@ public class ProductController {
     @RequestMapping(value = "/create/product", method = RequestMethod.POST)
     public ResponseEntity<SuccessResult> createPro(@RequestParam("proName") String proName, @RequestParam("proSimDesc") String proSimDesc,
                                                    @RequestParam(value = "proGrade", required = false) String proGrade, @RequestParam(value = "isHot", required = false, defaultValue = "false") boolean isHot,
-                                                   @RequestParam(value = "stratTime", required = false, defaultValue = "") String startTime, @RequestParam(value = "endTime", required = false, defaultValue = "") String endTime,
+                                                   @RequestParam(value = "startTime", required = false, defaultValue = "") String startTime, @RequestParam(value = "endTime", required = false, defaultValue = "") String endTime,
                                                    @RequestParam(value = "iconUrl", required = false) String iconUrl, @RequestParam("proImgUrl") String proImgUrl,
                                                    @RequestParam(value = "proLabel", required = false) String proLabel, @RequestParam(value = "proType", defaultValue = "0") int proType,
                                                    @RequestParam(value = "marks", required = false) String marks, @RequestParam("proRecommend") String proRecommend,
@@ -183,9 +183,9 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/client/getAllProduct", method = RequestMethod.POST)
-    public ResponseEntity<SuccessResult<List<ProductInfoModel>>> getAllClientProduct() {
+    public ResponseEntity<SuccessResult<List<ProductInfoModel>>> getAllClientProduct(@RequestParam("type") int type) {
         SuccessResult<List<ProductInfoModel>> successResult = new SuccessResult<>();
-        List<ProductInfoModel> products = productService.getClientProducts();
+        List<ProductInfoModel> products = productService.getClientProducts(type);
         successResult.setCode(1000);
         successResult.setMessage("响应成功");
         successResult.setDate(products);
@@ -196,5 +196,14 @@ public class ProductController {
     public ResponseEntity<ProductInfoModel> editProduct(@RequestParam("id") int id) {
         ProductInfoModel productInfoModel = productService.getOneProdById(id);
         return new ResponseEntity<>(productInfoModel, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/client/getProRecommend", method = RequestMethod.POST)
+    public ResponseEntity<SuccessResult<String>> getProRecommend(@RequestParam("id") int id) {
+        SuccessResult<String> successResult = new SuccessResult<>();
+        String proRecommend = productService.getProRecommend(id);
+        successResult.setCode(1000);
+        successResult.setDate(proRecommend);
+        return new ResponseEntity<>(successResult, HttpStatus.OK);
     }
 }

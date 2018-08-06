@@ -7,7 +7,7 @@ import java.util.List;
 public class VoteResult {
     private String prodName;
     private List<String> userMobiles;
-    private List<Double> userLimits;
+    private List<Integer> userLimits;
     private double amount;
 
     public String getProdName() {
@@ -26,11 +26,11 @@ public class VoteResult {
         this.userMobiles = userMobiles;
     }
 
-    public List<Double> getUserLimits() {
+    public List<Integer> getUserLimits() {
         return userLimits;
     }
 
-    public void setUserLimits(List<Double> userLimits) {
+    public void setUserLimits(List<Integer> userLimits) {
         this.userLimits = userLimits;
     }
 

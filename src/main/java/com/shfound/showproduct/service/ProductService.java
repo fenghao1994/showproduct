@@ -7,10 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class ProductService {
@@ -59,12 +56,13 @@ public class ProductService {
         return productInfoModels;
     }
 
-    public List<ProductInfoModel> getClientProducts() {
-        String sql = "SELECT * FROM product_info WHERE is_delete = FALSE ";
+    public List<ProductInfoModel> getClientProducts(int type) {
+        String sql = "SELECT * FROM product_info WHERE is_delete = FALSE AND pro_type = " + type;
         List<ProductInfoModel> productInfoModels = new ArrayList<>();
 
         List<Map<String, Object>> mapArrayList = jdbcTemplate.queryForList(sql);
         findResult(productInfoModels, mapArrayList);
+        Collections.reverse(productInfoModels);
         return productInfoModels;
     }
 
@@ -95,6 +93,12 @@ public class ProductService {
             return null;
         }
         return productInfoModels.get(0);
+    }
+
+    public String getProRecommend(int id) {
+        String sql = "SELECT pro_recommend FROM product_info WHERE id = " + id;
+        String proRecommond = jdbcTemplate.queryForObject(sql, String.class);
+        return proRecommond;
     }
 
     private void findResult(List<ProductInfoModel> productInfoModels, List<Map<String, Object>> mapArrayList) {
