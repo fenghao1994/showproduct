@@ -1,8 +1,8 @@
 package com.shfound.showproduct.service;
 
 import com.shfound.showproduct.controller.result.CustomerResult;
-import com.shfound.showproduct.model.ProductInfoModel;
 import com.shfound.showproduct.model.UserModel;
+import com.shfound.showproduct.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -32,7 +32,7 @@ public class UserService {
         UserModel user = isExite(userModel);
         if (user == null) {
             int index = insertUser(userModel);
-            if (index >= 0) {
+            if (index > 0) {
                 return 1000;
             } else {
                 return 1001;
@@ -210,5 +210,30 @@ public class UserService {
             return update;
         }
         return -1;
+    }
+
+    public boolean createRelationship(String superUser, String subUser) {
+        UserModel superUserModel = new UserModel();
+        superUserModel.setWxId(superUser);
+        UserModel subUserModel = new UserModel();
+        subUserModel.setWxId(subUser);
+
+        UserModel superExite = isExite(superUserModel);
+        if (superExite == null) {
+            superUserModel.setPassword(Utils.md5("123456"));
+            register(superUserModel);
+        }
+
+        UserModel subExite = isExite(subUserModel);
+        if (subExite == null) {
+            subUserModel.setPassword(Utils.md5("123456"));
+            subUserModel.setSuperInviteCode(superUser);
+            int flag = register(subUserModel);
+            return flag == 1000 ? true : false;
+        } else {
+            String sql = "UPDATE user SET super_invite_code = ? WHERE wx_id = ?";
+            int update = jdbcTemplate.update(sql, new Object[]{superUser, subUser});
+            return update > 0 ? true : false;
+        }
     }
 }

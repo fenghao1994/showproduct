@@ -13,4 +13,10 @@ var navs = [{
     "href": "votelist.html",
     "spread": false,
     }
+    ,
+    {
+        "title": "创建关系",
+        "href": "create_relationship.html",
+        "spread": false,
+    }
 ];

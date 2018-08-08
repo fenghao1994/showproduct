@@ -340,7 +340,7 @@
             }
 
             $.ajax({
-                url: "/prod/update/product",
+                url: "/prod/root/update/product",
                 type: "post",
                 dataType: "json",
                 data: {
@@ -380,7 +380,7 @@ function initPage() {
     var pid = getUrlParam("id")
     $.ajax({
         type: "post",
-        url:"prod/editProd",
+        url:"prod/root/editProd",
         data: {
             id: pid
         },
@@ -434,7 +434,11 @@ function gosubmit() {
             $("#iconUrl").attr('value', path);
         },
         error: function (err) {
-            console.log(err)
+            if (err.responseText !== 'null' || err.responseText !== '' || err.responseText !== "")  {
+                $("#iconUrl").attr('value', err.responseText);
+            } else {
+                console.log(err)
+            }
         }
     });
 }
@@ -452,6 +456,12 @@ function proImgSubmit() {
             $("#proImgUrl").attr('value', path);
         },
         error: function (err) {
+            if (err.responseText !== 'null' || err.responseText !== '' || err.responseText !== "")  {
+                $("#proImgUrl").attr('value', err.responseText);
+            }else {
+
+            }
+
             console.log(err)
         }
     });

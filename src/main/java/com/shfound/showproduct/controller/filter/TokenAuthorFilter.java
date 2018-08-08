@@ -19,7 +19,7 @@ import java.io.UnsupportedEncodingException;
 
 
 @Component
-@WebFilter(urlPatterns = {"/user/update/headimg"}, filterName = "tokenAuthorFilter")
+@WebFilter(urlPatterns = {""}, filterName = "tokenAuthorFilter")
 public class TokenAuthorFilter implements Filter {
 
     Logger logger = LoggerFactory.getLogger(TokenAuthorFilter.class);
@@ -45,7 +45,7 @@ public class TokenAuthorFilter implements Filter {
 
         SuccessResult res = new SuccessResult();
         if (null == token || token.isEmpty() || value.isEmpty()) {
-            res.setCode(1001);
+            res.setCode(2000);
             res.setMessage("用户身份验证失败，请重新登录");
 
             PrintWriter writer = null;

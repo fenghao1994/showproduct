@@ -2,17 +2,15 @@ package com.shfound.showproduct.service;
 
 import com.shfound.showproduct.controller.result.VoteClientResult;
 import com.shfound.showproduct.controller.result.VoteResult;
-import com.shfound.showproduct.model.ProductInfoModel;
-import com.shfound.showproduct.model.UserModel;
 import com.shfound.showproduct.model.VoteModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class VoteService {
@@ -44,8 +42,8 @@ public class VoteService {
                 voteModel.setProdLimit((int) mapArrayList.get(i).get("prod_limit"));
                 voteModel.setProdId((Integer) mapArrayList.get(i).get("prod_id"));
                 voteModel.setWxId((String) mapArrayList.get(i).get("wx_id"));
-                voteModel.setCreateTime((Date) mapArrayList.get(i).get("create_time"));
-                voteModel.setEditTime((Date) mapArrayList.get(i).get("end_time"));
+                voteModel.setCreateTime((long) mapArrayList.get(i).get("create_time"));
+                voteModel.setEditTime((long) mapArrayList.get(i).get("end_time"));
                 voteModelList.add(voteModel);
             }
         }
@@ -64,8 +62,8 @@ public class VoteService {
                 voteModel.setProdLimit((int) mapArrayList.get(i).get("prod_limit"));
                 voteModel.setProdId((Integer) mapArrayList.get(i).get("prod_id"));
                 voteModel.setWxId((String) mapArrayList.get(i).get("wx_id"));
-                voteModel.setCreateTime((Date) mapArrayList.get(i).get("create_time"));
-                voteModel.setEditTime((Date) mapArrayList.get(i).get("end_time"));
+                voteModel.setCreateTime((long) mapArrayList.get(i).get("create_time"));
+                voteModel.setEditTime((long) mapArrayList.get(i).get("end_time"));
                 voteModelList.add(voteModel);
             }
         }
@@ -95,8 +93,8 @@ public class VoteService {
                 voteModel.setProdLimit((int) mapArrayList.get(i).get("prod_limit"));
                 voteModel.setProdId((Integer) mapArrayList.get(i).get("prod_id"));
                 voteModel.setWxId((String) mapArrayList.get(i).get("wx_id"));
-                voteModel.setCreateTime((Date) mapArrayList.get(i).get("create_time"));
-                voteModel.setEditTime((Date) mapArrayList.get(i).get("end_time"));
+                voteModel.setCreateTime((long) mapArrayList.get(i).get("create_time"));
+                voteModel.setEditTime((long) mapArrayList.get(i).get("end_time"));
                 voteModelList.add(voteModel);
             }
         }

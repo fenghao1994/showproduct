@@ -2,15 +2,16 @@ package com.shfound.showproduct.model;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * 轮播 组件model
  */
 @Entity
 @Table(name = "advertisement")
+@EntityListeners(AuditingEntityListener.class)
 public class AdvertisementModel {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -33,10 +34,10 @@ public class AdvertisementModel {
     private String marks;
 
     @CreatedDate
-    private Date createDate;
+    private Long createDate;
 
     @LastModifiedDate
-    private Date editDate;
+    private Long editDate;
 
     @Column
     private boolean isDelete;
@@ -81,19 +82,19 @@ public class AdvertisementModel {
         this.marks = marks;
     }
 
-    public Date getCreateDate() {
+    public Long getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(Long createDate) {
         this.createDate = createDate;
     }
 
-    public Date getEditDate() {
+    public Long getEditDate() {
         return editDate;
     }
 
-    public void setEditDate(Date editDate) {
+    public void setEditDate(Long editDate) {
         this.editDate = editDate;
     }
 

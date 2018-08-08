@@ -6,17 +6,20 @@ import com.shfound.showproduct.controller.result.UserResult;
 import com.shfound.showproduct.model.UserModel;
 import com.shfound.showproduct.service.UserService;
 import com.shfound.showproduct.util.Utils;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +80,18 @@ public class UserController {
         return new ResponseEntity<>(successResult, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/loginByRoot", method = RequestMethod.POST)
+    public ResponseEntity rootLogin(HttpServletRequest request){
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        if (username.equals("admin") && password.equals("admin")){
+            request.getSession().setAttribute("isLogin", true);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else {
+            request.getSession().setAttribute("isLogin", false);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -148,7 +163,7 @@ public class UserController {
         return new ResponseEntity<>(successResult, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/update/headimg", method = RequestMethod.POST)
+    @RequestMapping(value = "/client/update/headimg", method = RequestMethod.POST)
     public ResponseEntity<SuccessResult<UserResult>> updateHeadImg(@RequestParam("mobile") String mobile, @RequestParam("headImg") String headImg) {
         SuccessResult<UserResult> successResult = new SuccessResult<>();
         UserResult userResult = new UserResult();
@@ -190,7 +205,7 @@ public class UserController {
      * 获取所有用户
      * @return
      */
-    @RequestMapping(value = "getAllUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/root/getAllUser", method = RequestMethod.POST)
     public ResponseEntity<List<UserModel>> getAllUser() {
         List<UserModel> allUser = userService.getAllUser();
         return new ResponseEntity<>(allUser, HttpStatus.OK);
@@ -201,7 +216,7 @@ public class UserController {
      * @param wxId
      * @return
      */
-    @RequestMapping(value = "/getSearchUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/root/getSearchUser", method = RequestMethod.POST)
     public ResponseEntity<List<UserModel>> getSearchUer(@RequestParam("wxId") String wxId) {
         UserModel user = userService.getOneUser(wxId);
         List<UserModel> list = new ArrayList<>();
@@ -241,7 +256,7 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/shareurl", method = RequestMethod.POST)
+    @RequestMapping(value = "/client/shareurl", method = RequestMethod.POST)
     public ResponseEntity<SuccessResult<UserResult>> getShareUrl(@RequestParam("wxId")String wxId) {
         String root = env.getProperty("web.router");
         UserResult userResult = new UserResult();
@@ -252,5 +267,15 @@ public class UserController {
         successResult.setDate(userResult);
         successResult.setCode(1000);
         return new ResponseEntity<>(successResult, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/root/create/relationship", method = RequestMethod.POST)
+    public ResponseEntity createRelationShip(@RequestParam("superUser") String superUser, @RequestParam("subUser") String subUser) {
+        boolean relationship = userService.createRelationship(superUser, subUser);
+        if (relationship) {
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -78,7 +78,7 @@
                 $scope.getVote = function (voteid) {
                     $http({
                         method: 'POST',
-                        url: 'vote/getVote',
+                        url: 'vote/root/getVote',
                         data: "prodId=" + voteid,
                         headers:{"Content-Type": "application/x-www-form-urlencoded"}
                     }).then(function successCallback(response) {

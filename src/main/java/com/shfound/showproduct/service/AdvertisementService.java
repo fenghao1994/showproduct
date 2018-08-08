@@ -2,13 +2,10 @@ package com.shfound.showproduct.service;
 
 import com.shfound.showproduct.model.AdvertisementModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -60,9 +57,9 @@ public class AdvertisementService {
         if (mapArrayList != null && mapArrayList.size() > 0) {
             for (int i = 0; i < mapArrayList.size(); i++) {
                 AdvertisementModel advertisementModel = new AdvertisementModel();
-                advertisementModel.setCreateDate((Date) mapArrayList.get(i).get("create_date"));
+                advertisementModel.setCreateDate((Long) mapArrayList.get(i).get("create_date"));
                 advertisementModel.setDelete((Boolean) mapArrayList.get(i).get("is_delete"));
-                advertisementModel.setEditDate((Date) mapArrayList.get(i).get("edit_date"));
+                advertisementModel.setEditDate((Long) mapArrayList.get(i).get("edit_date"));
                 advertisementModel.setId((Integer) mapArrayList.get(i).get("id"));
                 advertisementModel.setImgUrl((String) mapArrayList.get(i).get("img_url"));
                 advertisementModel.setJumpPage((String) mapArrayList.get(i).get("jump_page"));

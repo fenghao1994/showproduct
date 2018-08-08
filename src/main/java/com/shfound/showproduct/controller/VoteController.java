@@ -22,7 +22,7 @@ public class VoteController {
     @Autowired
     private VoteService voteService;
 
-    @RequestMapping(value = "/create/vote", method = RequestMethod.POST)
+    @RequestMapping(value = "/client/create/vote", method = RequestMethod.POST)
     public ResponseEntity<SuccessResult> createVote(@RequestParam("wxId")String wxId, @RequestParam("prodId") int prodId, @RequestParam("prodLimit")int prodLimit) {
         VoteModel voteModel = new VoteModel();
         voteModel.setWxId(wxId);
@@ -41,7 +41,7 @@ public class VoteController {
         return new ResponseEntity<>(successResult, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getVote", method = RequestMethod.POST)
+    @RequestMapping(value = "/root/getVote", method = RequestMethod.POST)
     public ResponseEntity<VoteResult> getVote(@RequestParam("prodId") String proId) {
         VoteResult allVote = voteService.getAllVote(Integer.parseInt(proId));
         return new ResponseEntity<>(allVote, HttpStatus.OK);

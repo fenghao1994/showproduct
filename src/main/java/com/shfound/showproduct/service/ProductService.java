@@ -4,10 +4,11 @@ import com.shfound.showproduct.model.ProductInfoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class ProductService {
@@ -107,9 +108,9 @@ public class ProductService {
                 ProductInfoModel productInfoModel = new ProductInfoModel();
                 productInfoModel.setId((Integer) mapArrayList.get(i).get("id"));
                 productInfoModel.setCollectionCoinAddress((String) mapArrayList.get(i).get("collection_coin_address"));
-                productInfoModel.setCreateTime((Date) mapArrayList.get(i).get("create_time"));
+                productInfoModel.setCreateTime((Long) mapArrayList.get(i).get("create_time"));
                 productInfoModel.setDelete((Boolean) mapArrayList.get(i).get("is_delete"));
-                productInfoModel.setEditTime((Date) mapArrayList.get(i).get("edit_time"));
+                productInfoModel.setEditTime((Long) mapArrayList.get(i).get("edit_time"));
                 productInfoModel.setEndTime((String) mapArrayList.get(i).get("end_time"));
                 productInfoModel.setHot((Boolean) mapArrayList.get(i).get("is_hot"));
                 productInfoModel.setIconUrl((String) mapArrayList.get(i).get("icon_url"));

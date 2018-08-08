@@ -89,7 +89,7 @@
 				$scope.load = function() {
 					$http({
 						method: 'POST',
-						url:'user/getAllUser'
+						url:'user/root/getAllUser'
 					}).then(function successCallback(response){
 						$scope.users = response.data;
 					},function errorCallback(response){
@@ -112,7 +112,7 @@
 				$scope.getOneUser = function (wxId) {
 					$http({
 						method: 'POST',
-						url:'user/getSearchUser',
+						url:'user/root/getSearchUser',
 						data:"wxId=" + wxId,
 						headers:{"Content-Type": "application/x-www-form-urlencoded"}
 					}).then(function successCallback(response){

@@ -21,37 +21,14 @@
 		<div style="margin: 15px;">
 			
 			<fieldset class="layui-elem-field">
-				<legend>项目列表</legend>
-				<div class="layui-field-box" ng-app="simPro" ng-controller="getSimpro" ng-init="load()">
+				<legend>创建关系谱</legend>
+				<div class="layui-field-box" ng-app="relationship" ng-controller="createRelationship">
 					<div>
 						<form >
-							<input type="text" ng-model="proname"/>
-							<button type="button" id="search" ng-click="getOneProd(proname)">根据项目名字搜索</button>
-							<button type="button" id="create" ng-click="createPro()">创建新项目</button>
+							<input type="text" ng-model="superUser" placeholder="邀请者 微信ID"/>
+							<input type="text" ng-model="subUser" placeholder="被邀请者 微信ID"/>
+							<button type="button" id="search" ng-click="createRelationship(superUser, subUser)">创建</button>
 						</form>
-						<table class="site-table table-hover">
-							<thead>
-								<tr>
-									<!-- <th><input type="checkbox" id="selected-all"></th> -->
-									<th>项目ID</th>
-									<th>项目名称</th>
-									<th>操作</th>
-								</tr>
-							</thead>
-							<!--内容容器-->
-							<tbody id="con" >
-								<tr ng-repeat = "x in prod">
-									<!-- <td><input type="checkbox"></td> -->
-									<td>{{x.id}}</td>
-									<td>{{x.name}}</td>
-									<td>
-										<!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>-->
-										<!--<a href="/edituser.html?id={{x.id}}" class="layui-btn layui-btn-mini">编辑</a>-->
-										<a ng-click="editProd(x.id)" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">编辑</a>
-									</td>
-								</tr>
-							</tbody>
-						</table>
 						<!--分页容器-->
 						<div id="paged"></div>
 					</div>
@@ -76,43 +53,20 @@
 		</script>
 		<script type="text/javascript" src="plugins/layui/layui.js"></script>
 		<script>
-			var app = angular.module('simPro', []);
+			var app = angular.module('relationship', []);
 			app.config(function ($httpProvider) {
 				$httpProvider.defaults.headers.common = { 'Content-Type' : 'application/x-www-form-urlencoded' }
 			});
-			app.controller('getSimpro', function($scope, $http){
-				$scope.load = function() {
-					$http({
-						method: 'POST',
-						url:'prod/root/getAllSimpleProduct'
-					}).then(function successCallback(response){
-						$scope.prod = response.data;
-					},function errorCallback(response){
-						window.open("login.html");
-						console.info(response);
-					});
-				}
-				$scope.editProd = function (id) {
-                    parent.tab.tabAdd({
-                        href: 'edit_prod.html?id=' + id, //地址
-                        title: '编辑'
-                    });
-				}
-				$scope.createPro = function() {
-				    parent.tab.tabAdd({
-						href: 'create_prod.html',
-						title: '新建项目'
-					})
-				}
-                $scope.getOneProd = function (proname) {
+			app.controller('createRelationship', function($scope, $http){
+                $scope.createRelationship = function (superUser, subUser) {
                     $http({
                         method: 'POST',
-                        url: 'prod/root/getOneSimpleSearch',
-                        data: "name=" + proname,
+                        url: 'user/root/create/relationship',
+                        data: "superUser=" + superUser + "&subUser=" + subUser,
                         headers:{"Content-Type": "application/x-www-form-urlencoded"}
                     }).then(function successCallback(response) {
                         console.info(response.data);
-                        $scope.prod = response.data;
+                        alert("创建成功")
 
                     }, function errorCallback(response) {
                         alert("搜索无结果")

@@ -5,20 +5,15 @@ import com.shfound.showproduct.controller.result.SuccessResult;
 import com.shfound.showproduct.model.ProductInfoModel;
 import com.shfound.showproduct.service.ProductService;
 import org.apache.logging.log4j.util.Strings;
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.xml.ws.Response;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -27,7 +22,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @RequestMapping(value = "/create/product", method = RequestMethod.POST)
+    @RequestMapping(value = "/root/create/product", method = RequestMethod.POST)
     public ResponseEntity<SuccessResult> createPro(@RequestParam("proName") String proName, @RequestParam("proSimDesc") String proSimDesc,
                                                    @RequestParam(value = "proGrade", required = false) String proGrade, @RequestParam(value = "isHot", required = false, defaultValue = "false") boolean isHot,
                                                    @RequestParam(value = "startTime", required = false, defaultValue = "") String startTime, @RequestParam(value = "endTime", required = false, defaultValue = "") String endTime,
@@ -73,7 +68,7 @@ public class ProductController {
         return new ResponseEntity<>(successResult, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/update/product", method = RequestMethod.POST)
+    @RequestMapping(value = "/root/update/product", method = RequestMethod.POST)
     public ResponseEntity<SuccessResult> updatePro(@RequestParam("id") int id, @RequestParam("proName") String proName, @RequestParam("proSimDesc") String proSimDesc,
                                                    @RequestParam(value = "proGrade", required = false) String proGrade, @RequestParam(value = "isHot", required = false) boolean isHot,
                                                    @RequestParam(value = "startTime", required = false) String startTime, @RequestParam(value = "endTime", required = false) String endTime,
@@ -120,7 +115,7 @@ public class ProductController {
         return new ResponseEntity<>(successResult, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getAllProduct", method = RequestMethod.POST)
+    @RequestMapping(value = "/root/getAllProduct", method = RequestMethod.POST)
     public ResponseEntity<SuccessResult<List<ProductInfoModel>>> getAllProduct() {
         SuccessResult<List<ProductInfoModel>> successResult = new SuccessResult<>();
         List<ProductInfoModel> products = productService.getProducts();
@@ -130,7 +125,7 @@ public class ProductController {
         return new ResponseEntity<>(successResult, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getAllSimpleProduct", method = RequestMethod.POST)
+    @RequestMapping(value = "/root/getAllSimpleProduct", method = RequestMethod.POST)
     public ResponseEntity<List<SimpleProduct>> getAllSimpleProduct() {
 //        SuccessResult<List<SimpleProduct>> successResult = new SuccessResult<>();
         List<ProductInfoModel> products = productService.getProducts();
@@ -147,7 +142,7 @@ public class ProductController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getSearchProduct", method = RequestMethod.POST)
+    @RequestMapping(value = "/root/getSearchProduct", method = RequestMethod.POST)
     public ResponseEntity<SuccessResult<List<ProductInfoModel>>> getSearchProduct(@RequestParam("search") String search) {
         SuccessResult<List<ProductInfoModel>> successResult = new SuccessResult<>();
         List<ProductInfoModel> products = productService.getSearchProducts(search);
@@ -157,7 +152,7 @@ public class ProductController {
         return new ResponseEntity<>(successResult, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getOneSimpleSearch", method = RequestMethod.POST)
+    @RequestMapping(value = "/root/getOneSimpleSearch", method = RequestMethod.POST)
     public ResponseEntity<List<SimpleProduct>> getOneSimProduct(@RequestParam("name") String name) {
         List<ProductInfoModel> products = productService.getSearchProducts(name);
         List<SimpleProduct> list = new ArrayList<>();
@@ -182,7 +177,7 @@ public class ProductController {
         return new ResponseEntity<>(successResult, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/client/getAllProduct", method = RequestMethod.POST)
+    @RequestMapping(value = "/getAllProduct", method = RequestMethod.POST)
     public ResponseEntity<SuccessResult<List<ProductInfoModel>>> getAllClientProduct(@RequestParam("type") int type) {
         SuccessResult<List<ProductInfoModel>> successResult = new SuccessResult<>();
         List<ProductInfoModel> products = productService.getClientProducts(type);
@@ -192,7 +187,7 @@ public class ProductController {
         return new ResponseEntity<>(successResult, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/editProd", method = RequestMethod.POST)
+    @RequestMapping(value = "/root/editProd", method = RequestMethod.POST)
     public ResponseEntity<ProductInfoModel> editProduct(@RequestParam("id") int id) {
         ProductInfoModel productInfoModel = productService.getOneProdById(id);
         return new ResponseEntity<>(productInfoModel, HttpStatus.OK);

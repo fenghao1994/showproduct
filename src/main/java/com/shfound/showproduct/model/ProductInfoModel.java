@@ -2,15 +2,16 @@ package com.shfound.showproduct.model;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * 项目信息model
  */
 @Entity
 @Table(name = "productInfo")
+@EntityListeners(AuditingEntityListener.class)
 public class ProductInfoModel {
 
     @Id
@@ -60,7 +61,7 @@ public class ProductInfoModel {
     private String marks;
 
     //项目详情 H5内容
-    @Column
+    @Column(columnDefinition="TEXT")
     private String proRecommend;
 
     //项目真实额度
@@ -81,11 +82,11 @@ public class ProductInfoModel {
 
     //创建时间
     @CreatedDate
-    private Date createTime;
+    private Long createTime;
 
     //修改时间
     @LastModifiedDate
-    private Date editTime;
+    private Long editTime;
 
     @Column
     private boolean isDelete;
@@ -234,19 +235,19 @@ public class ProductInfoModel {
         isStopCollection = stopCollection;
     }
 
-    public Date getCreateTime() {
+    public Long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(Long createTime) {
         this.createTime = createTime;
     }
 
-    public Date getEditTime() {
+    public Long getEditTime() {
         return editTime;
     }
 
-    public void setEditTime(Date editTime) {
+    public void setEditTime(Long editTime) {
         this.editTime = editTime;
     }
 

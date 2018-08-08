@@ -2,15 +2,16 @@ package com.shfound.showproduct.model;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * 投票model
  */
 @Entity
 @Table(name = "vote")
+@EntityListeners(AuditingEntityListener.class)
 public class VoteModel {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -28,11 +29,11 @@ public class VoteModel {
 
     //创建时间
     @CreatedDate
-    private Date createTime;
+    private Long createTime;
 
     //修改时间
     @LastModifiedDate
-    private Date editTime;
+    private Long editTime;
 
     public int getId() {
         return id;
@@ -66,19 +67,19 @@ public class VoteModel {
         this.prodLimit = prodLimit;
     }
 
-    public Date getCreateTime() {
+    public Long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(Long createTime) {
         this.createTime = createTime;
     }
 
-    public Date getEditTime() {
+    public Long getEditTime() {
         return editTime;
     }
 
-    public void setEditTime(Date editTime) {
+    public void setEditTime(Long editTime) {
         this.editTime = editTime;
     }
 }
