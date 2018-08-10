@@ -3,6 +3,7 @@ package com.shfound.showproduct.service;
 import com.shfound.showproduct.controller.result.CustomerResult;
 import com.shfound.showproduct.model.UserModel;
 import com.shfound.showproduct.util.Utils;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -231,6 +232,9 @@ public class UserService {
             int flag = register(subUserModel);
             return flag == 1000 ? true : false;
         } else {
+            if (!Strings.isEmpty(subExite.getSuperInviteCode())) {
+                return false;
+            }
             String sql = "UPDATE user SET super_invite_code = ? WHERE wx_id = ?";
             int update = jdbcTemplate.update(sql, new Object[]{superUser, subUser});
             return update > 0 ? true : false;

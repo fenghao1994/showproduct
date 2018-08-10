@@ -18,5 +18,10 @@ var navs = [{
         "title": "创建关系",
         "href": "create_relationship.html",
         "spread": false,
+    },
+    {
+        "title": "返佣审核",
+        "href": "invitelist.html",
+        "spread": false,
     }
 ];
