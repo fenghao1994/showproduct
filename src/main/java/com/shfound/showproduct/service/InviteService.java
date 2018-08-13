@@ -27,10 +27,10 @@ public class InviteService {
         if (!relationship) {
             return 1001;
         }
-        String sql = "INSERT INTO invite (super_user, sub_user, img_path, statue) VALUE (?, ? , ? , ?)";
+        String sql = "INSERT INTO invite (super_user, sub_user, img_path, status, is_delete) VALUE (?, ? , ? , ?, ?)";
         int update = jdbcTemplate.update(sql, new Object[]{inviteModel.getSuperUser(), inviteModel.getSubUser()
-                , inviteModel.getImgPath(), inviteModel.getStatus()});
-        return update;
+                , inviteModel.getImgPath(), inviteModel.getStatus(), false});
+        return update > 0 ? 1000 : 1001;
     }
 
 
@@ -63,7 +63,7 @@ public class InviteService {
 
     public void deleteImg() {
 
-        String sql = "SELECT * FROM invite WHERE status = 1 OR status = 2 AND is_delete = FALSE";
+        String sql = "SELECT * FROM invite WHERE (status = 1 OR status = 2) AND is_delete = FALSE";
         List<InviteModel> inviteModels = new ArrayList<>();
         List<Map<String, Object>> mapArrayList = jdbcTemplate.queryForList(sql);
         if (mapArrayList != null && mapArrayList.size() > 0) {
@@ -80,10 +80,13 @@ public class InviteService {
             int update = jdbcTemplate.update(sql1, new Object[]{inviteModel.getId()});
         }
     }
+
     private void deleteImgFromDisk(List<InviteModel> list) {
-        String rootUrl = env.getProperty("image.upload.path");
+        String rootUrl = env.getProperty("web.router");
+        String rootDir = env.getProperty("image.upload.path");
         for (InviteModel inviteModel : list) {
             String path = inviteModel.getImgPath().replace(rootUrl, "");
+            path = rootDir + "/" + path;
             File file = new File(path);
             file.delete();
         }

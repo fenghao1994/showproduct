@@ -1,7 +1,6 @@
 package com.shfound.showproduct.controller;
 
 import com.baidu.ueditor.ActionEnter;
-import com.shfound.showproduct.model.ProductInfoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.Calendar;
-import java.util.Random;
 import java.util.UUID;
 
 @Controller
@@ -24,7 +22,7 @@ public class UEditorController {
 
     @RequestMapping("/")
     private String showPage(Model model) {
-        model.addAttribute("model", new ProductInfoModel());
+//        model.addAttribute("model", new ProductInfoModel());
         return "index";
     }
 

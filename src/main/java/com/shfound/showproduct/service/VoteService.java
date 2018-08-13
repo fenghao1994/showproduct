@@ -42,8 +42,8 @@ public class VoteService {
                 voteModel.setProdLimit((int) mapArrayList.get(i).get("prod_limit"));
                 voteModel.setProdId((Integer) mapArrayList.get(i).get("prod_id"));
                 voteModel.setWxId((String) mapArrayList.get(i).get("wx_id"));
-                voteModel.setCreateTime((long) mapArrayList.get(i).get("create_time"));
-                voteModel.setEditTime((long) mapArrayList.get(i).get("end_time"));
+//                voteModel.setCreateTime((long) mapArrayList.get(i).get("create_time"));
+//                voteModel.setEditTime((long) mapArrayList.get(i).get("end_time"));
                 voteModelList.add(voteModel);
             }
         }
@@ -62,8 +62,8 @@ public class VoteService {
                 voteModel.setProdLimit((int) mapArrayList.get(i).get("prod_limit"));
                 voteModel.setProdId((Integer) mapArrayList.get(i).get("prod_id"));
                 voteModel.setWxId((String) mapArrayList.get(i).get("wx_id"));
-                voteModel.setCreateTime((long) mapArrayList.get(i).get("create_time"));
-                voteModel.setEditTime((long) mapArrayList.get(i).get("end_time"));
+//                voteModel.setCreateTime((long) mapArrayList.get(i).get("create_time"));
+//                voteModel.setEditTime((long) mapArrayList.get(i).get("end_time"));
                 voteModelList.add(voteModel);
             }
         }
@@ -93,8 +93,8 @@ public class VoteService {
                 voteModel.setProdLimit((int) mapArrayList.get(i).get("prod_limit"));
                 voteModel.setProdId((Integer) mapArrayList.get(i).get("prod_id"));
                 voteModel.setWxId((String) mapArrayList.get(i).get("wx_id"));
-                voteModel.setCreateTime((long) mapArrayList.get(i).get("create_time"));
-                voteModel.setEditTime((long) mapArrayList.get(i).get("end_time"));
+//                voteModel.setCreateTime((long) mapArrayList.get(i).get("create_time"));
+//                voteModel.setEditTime((long) mapArrayList.get(i).get("end_time"));
                 voteModelList.add(voteModel);
             }
         }

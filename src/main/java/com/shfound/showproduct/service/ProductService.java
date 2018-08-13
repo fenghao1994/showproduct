@@ -108,9 +108,9 @@ public class ProductService {
                 ProductInfoModel productInfoModel = new ProductInfoModel();
                 productInfoModel.setId((Integer) mapArrayList.get(i).get("id"));
                 productInfoModel.setCollectionCoinAddress((String) mapArrayList.get(i).get("collection_coin_address"));
-                productInfoModel.setCreateTime((Long) mapArrayList.get(i).get("create_time"));
+//                productInfoModel.setCreateTime((Long) mapArrayList.get(i).get("create_time"));
                 productInfoModel.setDelete((Boolean) mapArrayList.get(i).get("is_delete"));
-                productInfoModel.setEditTime((Long) mapArrayList.get(i).get("edit_time"));
+//                productInfoModel.setEditTime((Long) mapArrayList.get(i).get("edit_time"));
                 productInfoModel.setEndTime((String) mapArrayList.get(i).get("end_time"));
                 productInfoModel.setHot((Boolean) mapArrayList.get(i).get("is_hot"));
                 productInfoModel.setIconUrl((String) mapArrayList.get(i).get("icon_url"));
