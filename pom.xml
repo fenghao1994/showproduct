@@ -95,6 +95,13 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
+        <!--融云-->
+        <dependency>
+            <groupId>cn.rongcloud.im</groupId>
+            <artifactId>server-sdk-java</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

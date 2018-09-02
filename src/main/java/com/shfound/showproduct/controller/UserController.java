@@ -6,6 +6,9 @@ import com.shfound.showproduct.controller.result.UserResult;
 import com.shfound.showproduct.model.UserModel;
 import com.shfound.showproduct.service.UserService;
 import com.shfound.showproduct.util.Utils;
+import io.rong.RongCloud;
+import io.rong.models.response.TokenResult;
+import io.rong.methods.user.User;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +38,10 @@ public class UserController {
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private Environment env;
+
+    RongCloud rongCloud;
+    User User;
+
 
     @RequestMapping(value = "/invitation")
     public String invitationWithoutId(Model model) {
@@ -277,5 +284,41 @@ public class UserController {
         } else {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+    }
+
+//    @RequestMapping(value = "/client/user/id", method = RequestMethod.POST)
+//    public ResponseEntity<Integer> getUserId(@RequestParam("wxId") String wxid) {
+//        UserModel userModel = new UserModel();
+//        userModel.setWxId(wxid);
+//        UserModel exite = userService.isExite(userModel);
+//        if (exite != null) {
+//            return new ResponseEntity<>(exite.getId(), HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(0, HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
+    @RequestMapping(value = "/client/chat/token", method = RequestMethod.POST)
+    public ResponseEntity<TokenResult> getChatToken(@RequestParam("wxId") String wxId) throws Exception {
+        if (rongCloud == null) {
+            rongCloud = RongCloud.getInstance(env.getProperty("ry.app.key"), env.getProperty("ry.secret"));
+            User = rongCloud.user;
+        }
+
+        String name = wxId;
+        String name1 = "";
+        if (name.length() >= 5) {
+            name1 += name.substring(0, 2);
+            name1 += "**";
+            name1 += name.substring(4, name.length());
+        } else {
+            name1 = name;
+        }
+        io.rong.models.user.UserModel user = new io.rong.models.user.UserModel()
+                .setId(wxId)
+                .setName(name1)
+                .setPortrait(env.getProperty("ry.header.img"));
+        TokenResult result = User.register(user);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

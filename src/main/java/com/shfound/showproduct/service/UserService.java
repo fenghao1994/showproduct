@@ -50,7 +50,7 @@ public class UserService {
         return update;
     }
 
-    private UserModel isExite(UserModel userModel) {
+    public UserModel isExite(UserModel userModel) {
         String sql = "SELECT * FROM user WHERE wx_id = ?";
         RowMapper<UserModel> rowMapper = new BeanPropertyRowMapper<>(UserModel.class);
         UserModel user;
